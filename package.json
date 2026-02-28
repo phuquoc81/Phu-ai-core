@@ -1,0 +1,16 @@
+{
+  "name": "phuai-nexus",
+  "version": "1.0.0",
+  "description": "PhuAI Nexus Pro — Enterprise AI SaaS Platform",
+  "private": true,
+  "scripts": {
+    "install:backend": "cd backend && npm install",
+    "install:frontend": "cd frontend && npm install",
+    "start:backend": "cd backend && npm start",
+    "start:frontend": "cd frontend && npm start",
+    "build:frontend": "cd frontend && npm run build"
+  },
+  "engines": {
+    "node": ">=20.x"
+  }
+}
