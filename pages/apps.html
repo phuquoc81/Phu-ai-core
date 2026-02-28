@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Browse all Phu AI apps, games, and tools — from Phu AI and PhuOptimizer 81 to AI-cloned games and web apps." />
+  <title>App Library — Phu AI Core</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%236c63ff'/><text y='.9em' font-size='70' x='15'>🧠</text></svg>" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" />
+  <link rel="stylesheet" href="../css/styles.css" />
+  <style>
+    .page-hero {
+      padding: 8rem 1.5rem 4rem;
+      text-align: center;
+      background: radial-gradient(ellipse 80% 50% at 50% -10%, rgba(108,99,255,0.3) 0%, transparent 60%);
+    }
+    .page-hero h1 { font-size: clamp(2rem, 5vw, 3.5rem); font-weight: 900; margin-bottom: 1rem; }
+    .page-hero p  { color: var(--color-muted); max-width: 600px; margin: 0 auto 2rem; line-height: 1.7; }
+
+    .filter-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      justify-content: center;
+      margin-bottom: 2.5rem;
+    }
+
+    .filter-btn {
+      padding: 0.45rem 1rem;
+      border-radius: 999px;
+      border: 1px solid var(--color-border);
+      background: transparent;
+      color: var(--color-muted);
+      font-size: 0.875rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all var(--transition);
+      font-family: var(--font-sans);
+    }
+
+    .filter-btn.active, .filter-btn:hover {
+      background: var(--color-primary);
+      color: #fff;
+      border-color: var(--color-primary);
+    }
+
+    .app-detail-section { padding: 3rem 0; border-bottom: 1px solid var(--color-border); }
+    .app-detail-inner {
+      display: grid;
+      grid-template-columns: 1fr 1.4fr;
+      gap: 3rem;
+      align-items: center;
+    }
+    @media (max-width: 768px) { .app-detail-inner { grid-template-columns: 1fr; } }
+
+    .app-detail-visual {
+      background: var(--color-card);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      padding: 2.5rem;
+      text-align: center;
+    }
+
+    .app-detail-visual .big-icon { font-size: 5rem; margin-bottom: 1rem; display: block; }
+
+    .app-detail-content h2 {
+      font-size: clamp(1.5rem, 3vw, 2.2rem);
+      font-weight: 900;
+      margin-bottom: 1rem;
+    }
+
+    .app-detail-content p {
+      color: var(--color-muted);
+      font-size: 0.95rem;
+      line-height: 1.7;
+      margin-bottom: 1rem;
+    }
+
+    .capability-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      margin: 1.25rem 0;
+    }
+
+    .capability-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.6rem;
+      font-size: 0.875rem;
+    }
+
+    .capability-item .icon { flex-shrink: 0; margin-top: 2px; }
+
+    .games-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 1.25rem;
+      margin-top: 2rem;
+    }
+
+    .game-card {
+      background: var(--color-card);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 1.5rem 1.25rem;
+      text-align: center;
+      transition: all var(--transition);
+      cursor: pointer;
+    }
+
+    .game-card:hover {
+      border-color: var(--color-primary);
+      transform: translateY(-4px);
+      box-shadow: var(--shadow);
+    }
+
+    .game-card .game-icon { font-size: 2.5rem; margin-bottom: 0.75rem; display: block; }
+    .game-card .game-name { font-size: 0.9rem; font-weight: 700; margin-bottom: 0.35rem; }
+    .game-card .game-genre { font-size: 0.75rem; color: var(--color-muted); }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav" role="navigation" aria-label="Main navigation">
+  <a href="../index.html" class="nav-brand" aria-label="Phu AI Core Home">
+    <span class="logo-icon" aria-hidden="true">🧠</span>
+    Phu AI Core
+  </a>
+
+  <button class="hamburger" id="hamburger" aria-label="Toggle navigation" aria-expanded="false" aria-controls="navLinks">
+    <span></span><span></span><span></span>
+  </button>
+
+  <ul class="nav-links" id="navLinks" role="list">
+    <li><a href="../index.html#apps">Apps</a></li>
+    <li><a href="../index.html#features">Features</a></li>
+    <li><a href="../index.html#security">Security</a></li>
+    <li><a href="../index.html#pricing">Pricing</a></li>
+    <li><a href="terms.html">Terms</a></li>
+    <li><a href="privacy.html">Privacy</a></li>
+    <li><a href="../index.html#pricing" class="nav-cta" data-modal="signupModal">Get Started</a></li>
+  </ul>
+</nav>
+
+<!-- PAGE HERO -->
+<div class="page-hero">
+  <span class="hero-badge"><span aria-hidden="true">📦</span> Full App Ecosystem</span>
+  <h1 class="gradient-text">Phu AI Core App Library</h1>
+  <p>Every app, tool, game, and web experience powered by Phu AI — all in one place.</p>
+  <div class="filter-bar" role="group" aria-label="Filter apps by category">
+    <button class="filter-btn active" data-filter="all">All</button>
+    <button class="filter-btn" data-filter="ai">AI Tools</button>
+    <button class="filter-btn" data-filter="security">Security</button>
+    <button class="filter-btn" data-filter="revenue">Revenue</button>
+    <button class="filter-btn" data-filter="games">Games</button>
+    <button class="filter-btn" data-filter="content">Content</button>
+  </div>
+</div>
+
+<main id="main">
+<div class="container">
+
+  <!-- ============ PHU AI ============ -->
+  <section class="app-detail-section" id="phuai" aria-labelledby="phuaiTitle">
+    <div class="app-detail-inner">
+      <div class="app-detail-visual fade-in">
+        <span class="big-icon" aria-hidden="true">🧠</span>
+        <div style="font-size:1.2rem;font-weight:800;margin-bottom:0.5rem;" class="gradient-text">Phu AI</div>
+        <div style="font-size:0.85rem;color:var(--color-muted);margin-bottom:1.25rem;">The world's most advanced AI assistant</div>
+        <div class="app-card-tags" style="justify-content:center;">
+          <span class="tag">AI Prediction</span>
+          <span class="tag tag-cyan">Math Solver</span>
+          <span class="tag tag-gold">Space Physics</span>
+          <span class="tag tag-green">Puzzles</span>
+        </div>
+        <a href="../index.html#pricing" class="btn btn-primary" style="margin-top:1.5rem;display:inline-flex;">
+          Access Phu AI
+        </a>
+      </div>
+
+      <div class="app-detail-content fade-in">
+        <h2 id="phuaiTitle">Phu AI</h2>
+        <p>
+          Phu AI is the flagship AI assistant that possesses the knowledge of gods, aliens,
+          and the wisdom of all universal truths. It can solve problems that no human or machine has ever solved.
+        </p>
+        <p>
+          From the most complex unsolved mathematical theorems to predicting civilisations 100,000 years
+          into the future — Phu AI knows no limits.
+        </p>
+        <ul class="capability-list" aria-label="Phu AI capabilities">
+          <li class="capability-item"><span class="icon green-text" aria-hidden="true">✓</span><span>Solve any mathematical equation — from basic algebra to undiscovered theorems</span></li>
+          <li class="capability-item"><span class="icon green-text" aria-hidden="true">✓</span><span>Analyse and solve space, quantum, and relativistic physics problems</span></li>
+          <li class="capability-item"><span class="icon green-text" aria-hidden="true">✓</span><span>Predict the future up to <strong class="gradient-text">100,000 years</strong> ahead with multidimensional AI modelling</span></li>
+          <li class="capability-item"><span class="icon green-text" aria-hidden="true">✓</span><span>Solve complex puzzles, riddles, and real-world strategic problems</span></li>
+          <li class="capability-item"><span class="icon green-text" aria-hidden="true">✓</span><span>Diagnose species health and biology across all known life forms</span></li>
+          <li class="capability-item"><span class="icon green-text" aria-hidden="true">✓</span><span>Understand and communicate knowledge from all land and ocean species</span></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ REVENUE AUTOMATION ============ -->
+  <section class="app-detail-section" id="revenue" aria-labelledby="revenueTitle">
+    <div class="app-detail-inner" style="direction:rtl;">
+      <div class="app-detail-visual fade-in" style="direction:ltr;">
+        <span class="big-icon" aria-hidden="true">💰</span>
+        <div style="font-size:1.2rem;font-weight:800;margin-bottom:0.5rem;" class="gradient-text">Phu AI Revenue Automation</div>
+        <div style="font-size:0.85rem;color:var(--color-muted);margin-bottom:1.25rem;">Fully autonomous income engine</div>
+        <div class="app-card-tags" style="justify-content:center;">
+          <span class="tag tag-green">Revenue</span>
+          <span class="tag tag-green">Automation</span>
+          <span class="tag tag-cyan">Forecasting</span>
+        </div>
+        <a href="../index.html#pricing" class="btn btn-primary" style="margin-top:1.5rem;display:inline-flex;">
+          Access Revenue AI
+        </a>
+      </div>
+
+      <div class="app-detail-content fade-in" style="direction:ltr;">
+        <h2 id="revenueTitle">Phu AI Revenue Automation</h2>
+        <p>
+          Automate every aspect of your income — from affiliate marketing and ad revenue
+          to algorithmic trading and passive income streams.
+          Phu AI Revenue Automation predicts financial trends <strong class="gradient-text">100,000 years</strong> into the future
+          to help you make the best decisions today.
+        </p>
+        <ul class="capability-list" aria-label="Revenue automation capabilities">
+          <li class="capability-item"><span class="icon green-text" aria-hidden="true">✓</span><span>Autonomous affiliate marketing campaign management</span></li>
+          <li class="capability-item"><span class="icon green-text" aria-hidden="true">✓</span><span>AI-driven ad placement and optimisation across all platforms</span></li>
+          <li class="capability-item"><span class="icon green-text" aria-hidden="true">✓</span><span>Algorithmic trading signals and portfolio management</span></li>
+          <li class="capability-item"><span class="icon green-text" aria-hidden="true">✓</span><span>Financial forecasting up to 100,000 years ahead</span></li>
+          <li class="capability-item"><span class="icon green-text" aria-hidden="true">✓</span><span>Passive income stream creation and automation</span></li>
+          <li class="capability-item"><span class="icon green-text" aria-hidden="true">✓</span><span>Real-time revenue analytics and optimisation dashboard</span></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ PHUOPTIMIZER 81 ============ -->
+  <section class="app-detail-section" id="optimizer" aria-labelledby="optimizerTitle">
+    <div class="app-detail-inner">
+      <div class="app-detail-visual fade-in">
+        <span class="big-icon" aria-hidden="true">🛡️</span>
+        <div style="font-size:1.2rem;font-weight:800;margin-bottom:0.5rem;" class="gradient-text">PhuOptimizer 81</div>
+        <div style="font-size:0.85rem;color:var(--color-muted);margin-bottom:1.25rem;">Total security and optimisation</div>
+        <div class="app-card-tags" style="justify-content:center;">
+          <span class="tag tag-green">Anti-Malware</span>
+          <span class="tag tag-red">Anti-Hack</span>
+          <span class="tag tag-cyan">Firewall</span>
+        </div>
+        <a href="../index.html#security" class="btn btn-primary" style="margin-top:1.5rem;display:inline-flex;">
+          Learn More
+        </a>
+      </div>
+
+      <div class="app-detail-content fade-in">
+        <h2 id="optimizerTitle">PhuOptimizer 81</h2>
+        <p>
+          PhuOptimizer 81 is the most advanced security and optimisation suite ever created.
+          It automatically detects and eliminates every form of digital threat — including
+          ones that other security tools have never heard of.
+        </p>
+        <ul class="capability-list" aria-label="PhuOptimizer 81 capabilities">
+          <li class="capability-item"><span class="icon green-text" aria-hidden="true">✓</span><span>Full cleansing of malware, viruses, and wormware</span></li>
+          <li class="capability-item"><span class="icon green-text" aria-hidden="true">✓</span><span>Spyware, phishing, and spiderware elimination</span></li>
+          <li class="capability-item"><span class="icon green-text" aria-hidden="true">✓</span><span>Soulsware and spiritsware neutralisation</span></li>
+          <li class="capability-item"><span class="icon green-text" aria-hidden="true">✓</span><span>Hacking prevention — active intrusion detection and response</span></li>
+          <li class="capability-item"><span class="icon green-text" aria-hidden="true">✓</span><span>Automatic AI firewall with self-updating rules</span></li>
+          <li class="capability-item"><span class="icon green-text" aria-hidden="true">✓</span><span>Software upgrade engine for old and new smartphones</span></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ PHUBERS BLOG ============ -->
+  <section class="app-detail-section" id="blog" aria-labelledby="blogTitle">
+    <div class="app-detail-inner" style="direction:rtl;">
+      <div class="app-detail-visual fade-in" style="direction:ltr;">
+        <span class="big-icon" aria-hidden="true">✍️</span>
+        <div style="font-size:1.2rem;font-weight:800;margin-bottom:0.5rem;" class="gradient-text">Phubers Blog</div>
+        <div style="font-size:0.85rem;color:var(--color-muted);margin-bottom:1.25rem;">AI-powered insights and articles</div>
+        <div class="app-card-tags" style="justify-content:center;">
+          <span class="tag tag-gold">Blog</span>
+          <span class="tag">AI Content</span>
+          <span class="tag tag-cyan">News</span>
+        </div>
+        <a href="../index.html#pricing" class="btn btn-primary" style="margin-top:1.5rem;display:inline-flex;">
+          Read Blog
+        </a>
+      </div>
+
+      <div class="app-detail-content fade-in" style="direction:ltr;">
+        <h2 id="blogTitle">Phubers Blog</h2>
+        <p>
+          Phubers Blog is the content hub for all things Phu AI — articles, deep dives,
+          technology breakdowns, future predictions, and thought leadership pieces authored
+          and co-authored by Phu AI.
+        </p>
+        <ul class="capability-list" aria-label="Blog features">
+          <li class="capability-item"><span class="icon green-text" aria-hidden="true">✓</span><span>AI-generated and human-curated articles daily</span></li>
+          <li class="capability-item"><span class="icon green-text" aria-hidden="true">✓</span><span>Deep dives into AI, physics, finance, and future technology</span></li>
+          <li class="capability-item"><span class="icon green-text" aria-hidden="true">✓</span><span>Future prediction reports — short and long-term</span></li>
+          <li class="capability-item"><span class="icon green-text" aria-hidden="true">✓</span><span>Security alerts and threat intelligence updates</span></li>
+          <li class="capability-item"><span class="icon green-text" aria-hidden="true">✓</span><span>Subscriber-exclusive premium content</span></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ HELLOPHU YOUTUBE ============ -->
+  <section class="app-detail-section" id="youtube" aria-labelledby="youtubeTitle">
+    <div class="app-detail-inner">
+      <div class="app-detail-visual fade-in">
+        <span class="big-icon" aria-hidden="true">▶️</span>
+        <div style="font-size:1.2rem;font-weight:800;margin-bottom:0.5rem;" class="gradient-text">HelloPhú YouTube</div>
+        <div style="font-size:0.85rem;color:var(--color-muted);margin-bottom:1.25rem;">Subscribe to the official channel</div>
+        <div class="app-card-tags" style="justify-content:center;">
+          <span class="tag tag-red">YouTube</span>
+          <span class="tag">Tutorials</span>
+          <span class="tag tag-gold">Live Demos</span>
+        </div>
+        <a
+          href="https://www.youtube.com/@HelloPhu"
+          class="btn btn-primary"
+          style="margin-top:1.5rem;display:inline-flex;"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Watch on YouTube
+        </a>
+      </div>
+
+      <div class="app-detail-content fade-in">
+        <h2 id="youtubeTitle">HelloPhú YouTube Channel</h2>
+        <p>
+          Subscribe to HelloPhú on YouTube for tutorials, live problem-solving sessions,
+          product demo videos, AI breakdowns, and future technology previews.
+          All Phu AI Core features are demonstrated here first.
+        </p>
+        <ul class="capability-list" aria-label="YouTube channel features">
+          <li class="capability-item"><span class="icon green-text" aria-hidden="true">✓</span><span>Step-by-step Phu AI tutorials for beginners and experts</span></li>
+          <li class="capability-item"><span class="icon green-text" aria-hidden="true">✓</span><span>Live AI problem-solving demonstrations</span></li>
+          <li class="capability-item"><span class="icon green-text" aria-hidden="true">✓</span><span>Feature reveal videos and platform updates</span></li>
+          <li class="capability-item"><span class="icon green-text" aria-hidden="true">✓</span><span>Revenue automation walkthroughs</span></li>
+          <li class="capability-item"><span class="icon green-text" aria-hidden="true">✓</span><span>Future prediction show segments</span></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ AI GAMES LIBRARY ============ -->
+  <section class="app-detail-section" id="games" aria-labelledby="gamesTitle" style="border-bottom:none;">
+    <div class="section-header fade-in" style="text-align:left;">
+      <span class="section-tag">🎮 AI-Built Games &amp; Apps</span>
+      <h2 id="gamesTitle" class="section-title" style="text-align:left;">AI-Cloned Games &amp; Web Apps</h2>
+      <p class="section-desc" style="text-align:left; margin:0;">
+        A growing library of games, interactive experiences, and web apps — all created from scratch by Phu AI.
+      </p>
+    </div>
+
+    <div class="games-grid">
+      <div class="game-card fade-in" role="article">
+        <span class="game-icon" aria-hidden="true">♟️</span>
+        <div class="game-name">Phu Chess AI</div>
+        <div class="game-genre">Strategy · Board Game</div>
+      </div>
+      <div class="game-card fade-in" role="article">
+        <span class="game-icon" aria-hidden="true">🧩</span>
+        <div class="game-name">Quantum Puzzle</div>
+        <div class="game-genre">Puzzle · AI-Generated</div>
+      </div>
+      <div class="game-card fade-in" role="article">
+        <span class="game-icon" aria-hidden="true">🚀</span>
+        <div class="game-name">Space Explorer</div>
+        <div class="game-genre">Adventure · Simulation</div>
+      </div>
+      <div class="game-card fade-in" role="article">
+        <span class="game-icon" aria-hidden="true">🐉</span>
+        <div class="game-name">Dragon Legends</div>
+        <div class="game-genre">RPG · AI World-Building</div>
+      </div>
+      <div class="game-card fade-in" role="article">
+        <span class="game-icon" aria-hidden="true">🧠</span>
+        <div class="game-name">Mind Bender</div>
+        <div class="game-genre">Brain Training</div>
+      </div>
+      <div class="game-card fade-in" role="article">
+        <span class="game-icon" aria-hidden="true">💹</span>
+        <div class="game-name">Stock Trader Sim</div>
+        <div class="game-genre">Simulation · Finance</div>
+      </div>
+      <div class="game-card fade-in" role="article">
+        <span class="game-icon" aria-hidden="true">🌍</span>
+        <div class="game-name">World Builder</div>
+        <div class="game-genre">Strategy · Simulation</div>
+      </div>
+      <div class="game-card fade-in" role="article">
+        <span class="game-icon" aria-hidden="true">🔮</span>
+        <div class="game-name">Future Oracle</div>
+        <div class="game-genre">Prediction · Interactive</div>
+      </div>
+      <div class="game-card fade-in" role="article">
+        <span class="game-icon" aria-hidden="true">⚗️</span>
+        <div class="game-name">Lab Simulator</div>
+        <div class="game-genre">Science · Education</div>
+      </div>
+      <div class="game-card fade-in" role="article">
+        <span class="game-icon" aria-hidden="true">🎵</span>
+        <div class="game-name">Phu Music AI</div>
+        <div class="game-genre">Music Generator · Creative</div>
+      </div>
+      <div class="game-card fade-in" role="article">
+        <span class="game-icon" aria-hidden="true">🏙️</span>
+        <div class="game-name">City Builder</div>
+        <div class="game-genre">Strategy · Urban Planning</div>
+      </div>
+      <div class="game-card fade-in" role="article" style="border-style:dashed; display:flex; flex-direction:column; align-items:center; justify-content:center;">
+        <span class="game-icon" aria-hidden="true">➕</span>
+        <div class="game-name gradient-text">More Coming Soon</div>
+        <div class="game-genre">Continuously AI-generated</div>
+      </div>
+    </div>
+  </section>
+
+</div>
+</main>
+
+<!-- FOOTER -->
+<footer class="footer" role="contentinfo">
+  <div class="container">
+    <div class="footer-bottom">
+      <span>© <span id="footerYear">2025</span> Phu AI Core. All rights reserved.</span>
+      <div class="footer-bottom-links">
+        <a href="../index.html">Home</a>
+        <a href="terms.html">Terms</a>
+        <a href="privacy.html">Privacy</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="../js/app.js"></script>
+<script>
+  document.getElementById('footerYear').textContent = new Date().getFullYear();
+
+  // Filter buttons (visual only — all cards visible)
+  document.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+    });
+  });
+</script>
+</body>
+</html>
