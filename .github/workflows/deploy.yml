@@ -9,6 +9,8 @@ jobs:
   # ── Backend tests ──────────────────────────────────────────
   test-backend:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     defaults:
       run:
         working-directory: backend
@@ -27,6 +29,8 @@ jobs:
   # ── Frontend build ─────────────────────────────────────────
   build-frontend:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     defaults:
       run:
         working-directory: frontend
@@ -53,6 +57,8 @@ jobs:
   # ── Deploy frontend to Vercel ──────────────────────────────
   deploy-frontend:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     needs: [test-backend, build-frontend]
     steps:
       - uses: actions/checkout@v4
@@ -71,6 +77,7 @@ jobs:
   # ── Deploy backend to Render ───────────────────────────────
   deploy-backend:
     runs-on: ubuntu-latest
+    permissions: {}
     needs: [test-backend]
     steps:
       - name: Trigger Render deploy

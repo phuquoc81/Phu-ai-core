@@ -7,7 +7,7 @@ const { body, validationResult } = require('express-validator');
 
 const User      = require('../models/User');
 const jwtConfig = require('../config/jwt');
-const { authLimiter } = require('../middleware/rateLimiter');
+const { authLimiter, defaultLimiter } = require('../middleware/rateLimiter');
 const auth      = require('../middleware/auth');
 
 // ── Register ─────────────────────────────────────────────────
@@ -64,7 +64,7 @@ router.post(
 );
 
 // ── Get current user ─────────────────────────────────────────
-router.get('/me', auth, (req, res) => {
+router.get('/me', defaultLimiter, auth, (req, res) => {
   res.json({ user: req.user });
 });
 

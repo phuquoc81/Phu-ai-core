@@ -5,6 +5,7 @@ const auth    = require('../middleware/auth');
 const User    = require('../models/User');
 const Usage   = require('../models/Usage');
 const Invoice = require('../models/Invoice');
+const { defaultLimiter } = require('../middleware/rateLimiter');
 
 // Admin-only guard
 const adminOnly = (req, res, next) => {
@@ -13,7 +14,7 @@ const adminOnly = (req, res, next) => {
 };
 
 // ── Revenue summary ──────────────────────────────────────────
-router.get('/revenue', auth, adminOnly, async (req, res, next) => {
+router.get('/revenue', defaultLimiter, auth, adminOnly, async (req, res, next) => {
   try {
     const [total, paid] = await Promise.all([
       Invoice.aggregate([{ $group: { _id: null, total: { $sum: '$amount' }, tax: { $sum: '$tax' } } }]),
@@ -31,7 +32,7 @@ router.get('/revenue', auth, adminOnly, async (req, res, next) => {
 });
 
 // ── User stats ────────────────────────────────────────────────
-router.get('/users', auth, adminOnly, async (req, res, next) => {
+router.get('/users', defaultLimiter, auth, adminOnly, async (req, res, next) => {
   try {
     const [totalUsers, activeSubscribers] = await Promise.all([
       User.countDocuments(),
@@ -44,7 +45,7 @@ router.get('/users', auth, adminOnly, async (req, res, next) => {
 });
 
 // ── Usage stats ───────────────────────────────────────────────
-router.get('/usage', auth, adminOnly, async (req, res, next) => {
+router.get('/usage', defaultLimiter, auth, adminOnly, async (req, res, next) => {
   try {
     const days  = parseInt(req.query.days) || 30;
     const since = new Date(Date.now() - days * 24 * 60 * 60 * 1000);
