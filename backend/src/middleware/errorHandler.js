@@ -9,8 +9,10 @@ export const asyncHandler = fn => (req, res, next) =>
 /**
  * Centralised Express error-handling middleware.
  * Must be registered LAST (after all routes).
+ * The `_next` parameter is intentionally unused but required by Express
+ * to recognise this as a 4-argument error handler.
  */
-export const errorHandler = (err, req, res, next) => { // eslint-disable-line no-unused-vars
+export const errorHandler = (err, req, res, _next) => {
   const status = err.statusCode || err.status || 500
 
   // Mongoose duplicate-key error

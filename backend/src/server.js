@@ -18,6 +18,18 @@ import adminRoutes from './routes/admin.js'
 
 const app = express()
 
+// Exact mapping from Stripe Price ID → plan key.
+// Keep in sync with ALLOWED_PRICE_IDS in routes/stripe.js and Stripe Dashboard.
+const PRICE_ID_TO_PLAN = {
+  price_starter:  'starter',
+  price_basic:    'basic',
+  price_standard: 'standard',
+  price_plus:     'plus',
+  price_phuai:    'phuai',
+  price_phuaipro: 'phuaipro',
+  price_phuairev: 'phuairev'
+}
+
 // Credits granted per plan key (kept in sync with usageController)
 const CREDITS_PER_PLAN = {
   starter: 100,
@@ -67,11 +79,9 @@ app.post('/api/stripe/webhook',
       const subscription = event.data.object
       const status = subscription.status === 'active' ? 'active' : 'inactive'
 
-      // Derive plan key from the first item's nickname/metadata or price ID
+      // Derive plan key from the Stripe Price ID using the exact map
       const priceId = subscription.items?.data?.[0]?.price?.id ?? ''
-      const planKey = Object.keys(CREDITS_PER_PLAN).find(k =>
-        priceId.toLowerCase().includes(k)
-      ) ?? null
+      const planKey = PRICE_ID_TO_PLAN[priceId] ?? null
 
       const user = await User.findOneAndUpdate(
         { stripeCustomerId: subscription.customer },

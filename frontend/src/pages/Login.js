@@ -1,8 +1,10 @@
 import React, { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 
 export default function Login() {
   const { login } = useAuth()
+  const navigate = useNavigate()
   const [mode, setMode] = useState('login') // 'login' | 'register'
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -39,7 +41,7 @@ export default function Login() {
     try {
       if (mode === 'login') {
         await login(email, password)
-        window.location.href = '/dashboard'
+        navigate('/dashboard')
       } else {
         const res = await fetch(`${API}/api/auth/register`, {
           method: 'POST',
@@ -53,7 +55,7 @@ export default function Login() {
         }
         // Auto-login after register
         await login(email, password)
-        window.location.href = '/dashboard'
+        navigate('/dashboard')
       }
     } catch {
       setError('Unable to connect. Please try again.')
