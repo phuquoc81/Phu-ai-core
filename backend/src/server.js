@@ -6,6 +6,8 @@ import rateLimit from 'express-rate-limit'
 import connectDB from './config/db.js'
 import stripe from './config/stripe.js'
 import User from './models/User.js'
+import Usage from './models/Usage.js'
+import { errorHandler } from './middleware/errorHandler.js'
 
 import authRoutes from './routes/auth.js'
 import stripeRoutes from './routes/stripe.js'
@@ -15,6 +17,29 @@ import teamRoutes from './routes/team.js'
 import adminRoutes from './routes/admin.js'
 
 const app = express()
+
+// Exact mapping from Stripe Price ID → plan key.
+// Keep in sync with ALLOWED_PRICE_IDS in routes/stripe.js and Stripe Dashboard.
+const PRICE_ID_TO_PLAN = {
+  price_starter:  'starter',
+  price_basic:    'basic',
+  price_standard: 'standard',
+  price_plus:     'plus',
+  price_phuai:    'phuai',
+  price_phuaipro: 'phuaipro',
+  price_phuairev: 'phuairev'
+}
+
+// Credits granted per plan key (kept in sync with usageController)
+const CREDITS_PER_PLAN = {
+  starter: 100,
+  basic: 300,
+  standard: 600,
+  plus: 1000,
+  phuai: 2000,
+  phuaipro: 5000,
+  phuairev: 10000
+}
 
 // Rate limiting
 const limiter = rateLimit({
@@ -53,17 +78,33 @@ app.post('/api/stripe/webhook',
         event.type === 'customer.subscription.updated') {
       const subscription = event.data.object
       const status = subscription.status === 'active' ? 'active' : 'inactive'
-      await User.findOneAndUpdate(
+
+      // Derive plan key from the Stripe Price ID using the exact map
+      const priceId = subscription.items?.data?.[0]?.price?.id ?? ''
+      const planKey = PRICE_ID_TO_PLAN[priceId] ?? null
+
+      const user = await User.findOneAndUpdate(
         { stripeCustomerId: subscription.customer },
-        { subscriptionStatus: status }
+        { subscriptionStatus: status, subscriptionPlan: planKey },
+        { new: true }
       )
+
+      // Add credits when subscription first becomes active
+      if (event.type === 'customer.subscription.created' && status === 'active' && user && planKey) {
+        const credits = CREDITS_PER_PLAN[planKey] || 0
+        await Usage.findOneAndUpdate(
+          { user: user._id },
+          { $inc: { credits } },
+          { upsert: true }
+        )
+      }
     }
 
     if (event.type === 'customer.subscription.deleted') {
       const subscription = event.data.object
       await User.findOneAndUpdate(
         { stripeCustomerId: subscription.customer },
-        { subscriptionStatus: 'inactive' }
+        { subscriptionStatus: 'inactive', subscriptionPlan: null }
       )
     }
 
@@ -72,7 +113,21 @@ app.post('/api/stripe/webhook',
 )
 
 // Security middleware
-app.use(helmet())
+app.use(helmet({
+  contentSecurityPolicy: {
+    directives: {
+      defaultSrc: ["'self'"],
+      scriptSrc: ["'self'"],
+      styleSrc: ["'self'", "'unsafe-inline'"],
+      imgSrc: ["'self'", 'data:', 'https:'],
+      connectSrc: ["'self'"],
+      fontSrc: ["'self'", 'https:'],
+      objectSrc: ["'none'"],
+      upgradeInsecureRequests: []
+    }
+  },
+  crossOriginEmbedderPolicy: false
+}))
 app.use(cors({
   origin: process.env.FRONTEND_URL,
   credentials: true
@@ -97,6 +152,9 @@ app.use('/api/team', teamRoutes)
 app.use('/api/admin', adminRoutes)
 
 app.get('/api/health', (req, res) => res.json({ status: 'ok' }))
+
+// Global error handler — must be last
+app.use(errorHandler)
 
 const PORT = process.env.PORT || 5000
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`))

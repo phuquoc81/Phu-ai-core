@@ -1,4 +1,5 @@
 import Usage from '../models/Usage.js'
+import { asyncHandler } from '../middleware/errorHandler.js'
 
 const CREDITS_PER_PLAN = {
   starter: 100,
@@ -10,13 +11,13 @@ const CREDITS_PER_PLAN = {
   phuairev: 10000
 }
 
-export const getUsage = async (req, res) => {
+export const getUsage = asyncHandler(async (req, res) => {
   let usage = await Usage.findOne({ user: req.user.id })
   if (!usage) usage = await Usage.create({ user: req.user.id })
   res.json(usage)
-}
+})
 
-export const recordUsage = async (req, res) => {
+export const recordUsage = asyncHandler(async (req, res) => {
   let usage = await Usage.findOne({ user: req.user.id })
   if (!usage) usage = await Usage.create({ user: req.user.id })
 
@@ -29,9 +30,9 @@ export const recordUsage = async (req, res) => {
   await usage.save()
 
   res.json({ creditsRemaining: usage.credits, totalCalls: usage.totalCalls })
-}
+})
 
-export const addCredits = async (req, res) => {
+export const addCredits = asyncHandler(async (req, res) => {
   const { userId, plan } = req.body
   const credits = CREDITS_PER_PLAN[plan] || 0
 
@@ -42,4 +43,4 @@ export const addCredits = async (req, res) => {
   )
 
   res.json(usage)
-}
+})

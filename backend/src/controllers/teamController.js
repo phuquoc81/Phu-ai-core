@@ -1,19 +1,20 @@
 import Team from '../models/Team.js'
 import User from '../models/User.js'
+import { asyncHandler } from '../middleware/errorHandler.js'
 
-export const createTeam = async (req, res) => {
+export const createTeam = asyncHandler(async (req, res) => {
   const { name } = req.body
   const team = await Team.create({ name, owner: req.user.id, members: [req.user.id] })
   res.status(201).json(team)
-}
+})
 
-export const getTeam = async (req, res) => {
+export const getTeam = asyncHandler(async (req, res) => {
   const team = await Team.findOne({ owner: req.user.id }).populate('members', 'email role')
   if (!team) return res.status(404).json({ message: 'No team found' })
   res.json(team)
-}
+})
 
-export const addMember = async (req, res) => {
+export const addMember = asyncHandler(async (req, res) => {
   const { email } = req.body
   const team = await Team.findOne({ owner: req.user.id })
   if (!team) return res.status(404).json({ message: 'No team found' })
@@ -33,9 +34,9 @@ export const addMember = async (req, res) => {
   await team.save()
 
   res.json(team)
-}
+})
 
-export const removeMember = async (req, res) => {
+export const removeMember = asyncHandler(async (req, res) => {
   const { userId } = req.params
   const team = await Team.findOne({ owner: req.user.id })
   if (!team) return res.status(404).json({ message: 'No team found' })
@@ -44,4 +45,4 @@ export const removeMember = async (req, res) => {
   await team.save()
 
   res.json(team)
-}
+})

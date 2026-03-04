@@ -5,6 +5,7 @@ const UserSchema = new mongoose.Schema({
   password: String,
   stripeCustomerId: String,
   subscriptionStatus: { type: String, default: 'inactive' },
+  subscriptionPlan: { type: String, default: null },
   role: { type: String, default: 'user' }
 }, { timestamps: true })
 
