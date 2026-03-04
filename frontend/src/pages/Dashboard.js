@@ -19,7 +19,16 @@ export default function Dashboard() {
     }
   }
 
-  if (!user) return <p style={{ padding: '2rem' }}>Please log in to access the dashboard.</p>
+  if (!user) {
+    return (
+      <div style={{ padding: '4rem 2rem', textAlign: 'center' }}>
+        <p style={{ color: '#8888aa', marginBottom: '1.5rem' }}>Please sign in to access the dashboard.</p>
+        <a href="/login" style={{ padding: '0.75rem 1.5rem', background: '#6c63ff', color: '#fff', textDecoration: 'none', borderRadius: '8px', fontWeight: 'bold' }}>
+          Sign In
+        </a>
+      </div>
+    )
+  }
 
   return (
     <div style={{ padding: '2rem', maxWidth: '900px', margin: '0 auto' }}>
@@ -36,6 +45,11 @@ export default function Dashboard() {
           <p style={{ fontWeight: 'bold', color: user.subscriptionStatus === 'active' ? '#00e5a0' : '#ff6b6b' }}>
             {user.subscriptionStatus === 'active' ? '✓ Active' : '✗ Inactive'}
           </p>
+          {user.subscriptionPlan && (
+            <p style={{ color: '#8888aa', fontSize: '0.85rem', marginTop: '0.25rem', textTransform: 'capitalize' }}>
+              Plan: {user.subscriptionPlan}
+            </p>
+          )}
         </div>
         {usage && (
           <>
@@ -51,13 +65,29 @@ export default function Dashboard() {
         )}
       </div>
 
-      <div style={{ display: 'flex', gap: '1rem' }}>
+      <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
+        {user.subscriptionStatus === 'active' && (
+          <a
+            href="/codegen"
+            style={{ padding: '0.75rem 1.5rem', background: '#00e5a0', color: '#0d0d1a', border: 'none', borderRadius: '8px', cursor: 'pointer', fontWeight: 'bold', textDecoration: 'none' }}
+          >
+            ⚡ AI Code Generator
+          </a>
+        )}
         <button
           onClick={openBillingPortal}
           style={{ padding: '0.75rem 1.5rem', background: '#6c63ff', color: '#fff', border: 'none', borderRadius: '8px', cursor: 'pointer', fontWeight: 'bold' }}
         >
           Manage Billing
         </button>
+        {user.subscriptionStatus !== 'active' && (
+          <a
+            href="/pricing"
+            style={{ padding: '0.75rem 1.5rem', background: 'transparent', color: '#6c63ff', border: '1px solid #6c63ff', borderRadius: '8px', cursor: 'pointer', fontWeight: 'bold', textDecoration: 'none' }}
+          >
+            Upgrade Plan
+          </a>
+        )}
       </div>
     </div>
   )

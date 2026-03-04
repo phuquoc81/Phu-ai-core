@@ -1,7 +1,8 @@
 import stripe from '../config/stripe.js'
 import User from '../models/User.js'
+import { asyncHandler } from '../middleware/errorHandler.js'
 
-export const createCheckoutSession = async (req, res) => {
+export const createCheckoutSession = asyncHandler(async (req, res) => {
   const { priceId, email } = req.body
 
   let user = await User.findOne({ email })
@@ -27,9 +28,9 @@ export const createCheckoutSession = async (req, res) => {
   })
 
   res.json({ url: session.url })
-}
+})
 
-export const createPortalSession = async (req, res) => {
+export const createPortalSession = asyncHandler(async (req, res) => {
   const user = await User.findById(req.user.id)
 
   if (!user?.stripeCustomerId) {
@@ -42,4 +43,4 @@ export const createPortalSession = async (req, res) => {
   })
 
   res.json({ url: session.url })
-}
+})
