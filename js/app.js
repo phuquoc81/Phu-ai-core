@@ -336,6 +336,29 @@ document.querySelectorAll('a[href^="#"]').forEach(link => {
 });
 
 /* ============================================================
+   FAQ ACCORDION
+   ============================================================ */
+(function () {
+  document.querySelectorAll('.faq-question').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const isOpen = btn.getAttribute('aria-expanded') === 'true';
+      const answer = btn.nextElementSibling;
+
+      // Close all other items
+      document.querySelectorAll('.faq-question[aria-expanded="true"]').forEach(other => {
+        if (other !== btn) {
+          other.setAttribute('aria-expanded', 'false');
+          other.nextElementSibling.classList.remove('open');
+        }
+      });
+
+      btn.setAttribute('aria-expanded', String(!isOpen));
+      answer.classList.toggle('open', !isOpen);
+    });
+  });
+})();
+
+/* ============================================================
    BACK TO TOP
    ============================================================ */
 (function () {
