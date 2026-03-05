@@ -177,9 +177,9 @@
           <span class="tag tag-gold">Space Physics</span>
           <span class="tag tag-green">Puzzles</span>
         </div>
-        <a href="../index.html#pricing" class="btn btn-primary" style="margin-top:1.5rem;display:inline-flex;">
+        <button type="button" class="btn btn-primary" data-modal="signupModal" data-plan="Phu AI ($49.99/mo)" style="margin-top:1.5rem;display:inline-flex;">
           Access Phu AI
-        </a>
+        </button>
       </div>
 
       <div class="app-detail-content fade-in">
@@ -216,9 +216,9 @@
           <span class="tag tag-green">Automation</span>
           <span class="tag tag-cyan">Forecasting</span>
         </div>
-        <a href="../index.html#pricing" class="btn btn-primary" style="margin-top:1.5rem;display:inline-flex;">
+        <button type="button" class="btn btn-primary" data-modal="signupModal" data-plan="Revenue Automation ($69.99/mo)" style="margin-top:1.5rem;display:inline-flex;">
           Access Revenue AI
-        </a>
+        </button>
       </div>
 
       <div class="app-detail-content fade-in" style="direction:ltr;">
@@ -289,7 +289,7 @@
           <span class="tag">AI Content</span>
           <span class="tag tag-cyan">News</span>
         </div>
-        <a href="../index.html#pricing" class="btn btn-primary" style="margin-top:1.5rem;display:inline-flex;">
+        <a href="https://phubers.blog" class="btn btn-primary" target="_blank" rel="noopener noreferrer" style="margin-top:1.5rem;display:inline-flex;">
           Read Blog
         </a>
       </div>
@@ -365,9 +365,9 @@
           <span class="tag tag-red">Video Generator</span>
           <span class="tag tag-cyan">Audio</span>
         </div>
-        <a href="../index.html#pricing" class="btn btn-primary" style="margin-top:1.5rem;display:inline-flex;">
+        <button type="button" class="btn btn-primary" data-modal="signupModal" style="margin-top:1.5rem;display:inline-flex;">
           Open Writing Studio
-        </a>
+        </button>
       </div>
 
       <div class="app-detail-content fade-in" style="direction:ltr;">
@@ -485,6 +485,80 @@
   </div>
 </footer>
 
+<!-- SIGN-UP MODAL -->
+<div class="modal-overlay" id="signupModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+  <div class="modal">
+    <button class="modal-close" aria-label="Close sign-up form">✕</button>
+    <h2 class="modal-title" id="modalTitle">🚀 Get Started with Phu AI Core</h2>
+    <p class="modal-subtitle">Create your account and choose a plan. 7-day free trial included.</p>
+
+    <form id="signupForm" novalidate>
+      <div class="form-group">
+        <label class="form-label" for="signupName">Full Name <span aria-hidden="true" style="color:var(--color-accent)">*</span></label>
+        <input
+          class="form-input"
+          type="text"
+          id="signupName"
+          name="name"
+          placeholder="Your full name"
+          required
+          autocomplete="name"
+        />
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="signupEmail">Email Address <span aria-hidden="true" style="color:var(--color-accent)">*</span></label>
+        <input
+          class="form-input"
+          type="email"
+          id="signupEmail"
+          name="email"
+          placeholder="you@example.com"
+          required
+          autocomplete="email"
+        />
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="signupPlan">Select Plan <span aria-hidden="true" style="color:var(--color-accent)">*</span></label>
+        <select class="form-input form-select" id="signupPlan" name="plan" required>
+          <option value="">— Choose a plan —</option>
+          <option value="Starter ($11.99/mo)">Starter — $11.99/month</option>
+          <option value="Basic ($19.99/mo)">Basic — $19.99/month</option>
+          <option value="Standard ($28.99/mo)">Standard — $28.99/month</option>
+          <option value="Plus ($36.99/mo)">Plus — $36.99/month ⭐ Popular</option>
+          <option value="Phu AI ($49.99/mo)">Phu AI — $49.99/month</option>
+          <option value="Phu AI Pro ($59.99/mo)">Phu AI Pro — $59.99/month</option>
+          <option value="Revenue Automation ($69.99/mo)">Revenue Automation — $69.99/month</option>
+          <option value="Yearly All-Access ($102.99/yr)">Yearly All-Access — $102.99/year 🔥 Best Value</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="paymentMethod">Payment Method</label>
+        <select class="form-input form-select" id="paymentMethod" name="payment">
+          <option value="stripe">💳 Credit / Debit Card (Stripe)</option>
+          <option value="etransfer">🏦 Interac e-Transfer</option>
+        </select>
+      </div>
+
+      <button type="submit" class="pricing-btn pricing-btn-primary" style="width:100%; margin-top:0.5rem;">
+        Start Free Trial
+      </button>
+
+      <p style="font-size:0.75rem; color:var(--color-muted); text-align:center; margin-top:1rem; line-height:1.5;">
+        By signing up you agree to our
+        <a href="terms.html" target="_blank">Terms of Service</a> and
+        <a href="privacy.html" target="_blank">Privacy Policy</a>.
+        You will not be charged during the 7-day trial.
+      </p>
+    </form>
+  </div>
+</div>
+
+<!-- Toast container -->
+<div class="toast-container" aria-live="polite" aria-atomic="true"></div>
+
 <script src="../js/app.js"></script>
 <script>
   document.getElementById('footerYear').textContent = new Date().getFullYear();
@@ -494,6 +568,19 @@
     btn.addEventListener('click', () => {
       document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
+    });
+  });
+
+  // Wire plan buttons to pre-select plan in modal
+  document.querySelectorAll('[data-plan]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const plan = btn.dataset.plan;
+      const select = document.getElementById('signupPlan');
+      if (select && plan) {
+        const opts = Array.from(select.options);
+        const match = opts.find(o => o.value === plan);
+        if (match) select.value = match.value;
+      }
     });
   });
 </script>
