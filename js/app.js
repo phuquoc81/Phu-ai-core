@@ -187,7 +187,12 @@ const Toast = (function () {
     const icons = { success: '✅', error: '❌', info: 'ℹ️', warning: '⚠️' };
     const toast = document.createElement('div');
     toast.className = `toast ${type}`;
-    toast.innerHTML = `<span>${icons[type] || 'ℹ️'}</span><span>${message}</span>`;
+    const iconSpan = document.createElement('span');
+    iconSpan.textContent = icons[type] || 'ℹ️';
+    const msgSpan = document.createElement('span');
+    msgSpan.textContent = message;
+    toast.appendChild(iconSpan);
+    toast.appendChild(msgSpan);
     container.appendChild(toast);
 
     // Trigger animation
@@ -311,7 +316,17 @@ const Toast = (function () {
     item.style.cssText = 'padding:0.5rem 0; border-bottom:1px solid rgba(255,255,255,0.06); font-size:0.82rem; color:#8888aa; display:flex; justify-content:space-between; gap:1rem;';
     const now = new Date();
     const time = now.toLocaleTimeString('en-US', { hour12: false });
-    item.innerHTML = `<span style="color:#00e5a0">✓</span><span style="flex:1">${events[idx % events.length]}</span><span>${time}</span>`;
+    const checkSpan = document.createElement('span');
+    checkSpan.style.color = '#00e5a0';
+    checkSpan.textContent = '✓';
+    const eventSpan = document.createElement('span');
+    eventSpan.style.flex = '1';
+    eventSpan.textContent = events[idx % events.length];
+    const timeSpan = document.createElement('span');
+    timeSpan.textContent = time;
+    item.appendChild(checkSpan);
+    item.appendChild(eventSpan);
+    item.appendChild(timeSpan);
     feed.insertBefore(item, feed.firstChild);
     if (feed.children.length > 6) feed.removeChild(feed.lastChild);
     idx++;
