@@ -11,35 +11,50 @@ const CREDITS_PER_PLAN = {
 }
 
 export const getUsage = async (req, res) => {
-  let usage = await Usage.findOne({ user: req.user.id })
-  if (!usage) usage = await Usage.create({ user: req.user.id })
-  res.json(usage)
+  try {
+    let usage = await Usage.findOne({ user: req.user.id })
+    if (!usage) usage = await Usage.create({ user: req.user.id })
+    res.json(usage)
+  } catch (err) {
+    console.error('getUsage error:', err.message)
+    res.status(500).json({ message: 'Server error' })
+  }
 }
 
 export const recordUsage = async (req, res) => {
-  let usage = await Usage.findOne({ user: req.user.id })
-  if (!usage) usage = await Usage.create({ user: req.user.id })
+  try {
+    let usage = await Usage.findOne({ user: req.user.id })
+    if (!usage) usage = await Usage.create({ user: req.user.id })
 
-  if (usage.credits <= 0) {
-    return res.status(402).json({ message: 'No credits remaining. Please upgrade your plan.' })
+    if (usage.credits <= 0) {
+      return res.status(402).json({ message: 'No credits remaining. Please upgrade your plan.' })
+    }
+
+    usage.credits -= 1
+    usage.totalCalls += 1
+    await usage.save()
+
+    res.json({ creditsRemaining: usage.credits, totalCalls: usage.totalCalls })
+  } catch (err) {
+    console.error('recordUsage error:', err.message)
+    res.status(500).json({ message: 'Server error' })
   }
-
-  usage.credits -= 1
-  usage.totalCalls += 1
-  await usage.save()
-
-  res.json({ creditsRemaining: usage.credits, totalCalls: usage.totalCalls })
 }
 
 export const addCredits = async (req, res) => {
-  const { userId, plan } = req.body
-  const credits = CREDITS_PER_PLAN[plan] || 0
+  try {
+    const { userId, plan } = req.body
+    const credits = CREDITS_PER_PLAN[plan] || 0
 
-  const usage = await Usage.findOneAndUpdate(
-    { user: userId },
-    { $inc: { credits } },
-    { upsert: true, new: true }
-  )
+    const usage = await Usage.findOneAndUpdate(
+      { user: userId },
+      { $inc: { credits } },
+      { upsert: true, new: true }
+    )
 
-  res.json(usage)
+    res.json(usage)
+  } catch (err) {
+    console.error('addCredits error:', err.message)
+    res.status(500).json({ message: 'Server error' })
+  }
 }
