@@ -407,7 +407,9 @@
           loading="lazy"
           width="340"
           height="340"
+          onerror="this.style.display='none';this.nextElementSibling.style.display='block';"
         />
+        <div aria-hidden="true" style="display:none; font-size:5rem; text-align:center;">🤖</div>
         <div style="font-size:1.2rem;font-weight:800;margin:1.25rem 0 0.5rem;" class="gradient-text">Phu AI App Builder</div>
         <div style="font-size:0.85rem;color:var(--color-muted);margin-bottom:1.25rem;">Zero code. Full app. Instant deploy.</div>
         <div class="app-card-tags" style="justify-content:center;">
