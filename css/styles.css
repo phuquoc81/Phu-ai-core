@@ -603,6 +603,11 @@ section {
 
 .toggle-switch.on { background: var(--color-primary); }
 
+.toggle-switch:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 3px;
+}
+
 .toggle-switch::after {
   content: '';
   position: absolute;
@@ -986,7 +991,7 @@ section {
 
 .modal-overlay.open {
   opacity: 1;
-  pointer-events: all;
+  pointer-events: auto;
 }
 
 .modal {
@@ -1079,7 +1084,7 @@ section {
   gap: 0.5rem;
   transform: translateX(120%);
   transition: transform 0.4s cubic-bezier(.175,.885,.32,1.275);
-  pointer-events: all;
+  pointer-events: auto;
   max-width: 320px;
 }
 
