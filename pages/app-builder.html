@@ -1,0 +1,1175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Phu AI App Builder — describe your app idea, and Copilot GPT 5.3 automatically builds and deploys it to GitHub. No coding required." />
+  <title>App Builder — Phu AI Core</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%236c63ff'/><text y='.9em' font-size='70' x='15'>🧠</text></svg>" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" />
+  <link rel="stylesheet" href="../css/styles.css" />
+  <style>
+    /* ── Page Hero ─────────────────────────────────────────── */
+    .page-hero {
+      padding: 7rem 1.5rem 3.5rem;
+      background: radial-gradient(ellipse 90% 60% at 50% 0%, rgba(108,99,255,0.28) 0%, transparent 65%);
+      overflow: hidden;
+    }
+    .page-hero-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+      align-items: center;
+    }
+    @media (max-width: 820px) {
+      .page-hero-inner {
+        grid-template-columns: 1fr;
+        text-align: center;
+      }
+      .page-hero-text { order: 2; }
+      .page-hero-visual { order: 1; }
+      .copilot-badge { margin-left: auto; margin-right: auto; }
+    }
+    .page-hero h1 { font-size: clamp(2rem, 4.5vw, 3.2rem); font-weight: 900; margin-bottom: 1rem; }
+    .page-hero p  { color: var(--color-muted); max-width: 520px; margin: 0 0 2rem; line-height: 1.7; }
+    @media (max-width: 820px) {
+      .page-hero p { margin: 0 auto 2rem; }
+    }
+
+    /* ── Hero Image ─────────────────────────────────────────── */
+    .hero-image-wrap {
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .hero-image-glow {
+      position: absolute;
+      inset: -24px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(108,99,255,0.45) 0%, rgba(0,212,255,0.2) 50%, transparent 70%);
+      animation: heroGlow 4s ease-in-out infinite alternate;
+      pointer-events: none;
+    }
+    @keyframes heroGlow {
+      from { opacity: 0.6; transform: scale(0.95); }
+      to   { opacity: 1;   transform: scale(1.05); }
+    }
+    .hero-image-ring {
+      position: absolute;
+      inset: -8px;
+      border-radius: 50%;
+      border: 2px solid transparent;
+      background: linear-gradient(var(--color-bg), var(--color-bg)) padding-box,
+                  linear-gradient(135deg, var(--color-primary), var(--color-secondary), var(--color-primary)) border-box;
+      animation: ringRotate 8s linear infinite;
+      pointer-events: none;
+    }
+    @keyframes ringRotate {
+      from { transform: rotate(0deg); }
+      to   { transform: rotate(360deg); }
+    }
+    .hero-image {
+      width: min(420px, 90vw);
+      height: min(420px, 90vw);
+      border-radius: 50%;
+      object-fit: cover;
+      display: block;
+      position: relative;
+      z-index: 1;
+      box-shadow: 0 0 60px rgba(108,99,255,0.5), 0 0 120px rgba(0,212,255,0.2);
+    }
+
+    /* ── Stepper ────────────────────────────────────────────── */
+    .stepper {
+      display: flex;
+      justify-content: center;
+      gap: 0;
+      margin-bottom: 2.5rem;
+      flex-wrap: wrap;
+    }
+    .step-item {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--color-muted);
+      padding: 0.5rem 1rem;
+    }
+    .step-item.active { color: var(--color-primary); }
+    .step-item.done   { color: var(--color-green); }
+    .step-num {
+      width: 28px; height: 28px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.78rem; font-weight: 800;
+      border: 2px solid var(--color-border);
+      background: var(--color-card);
+      flex-shrink: 0;
+      transition: all var(--transition);
+    }
+    .step-item.active .step-num {
+      border-color: var(--color-primary);
+      background: rgba(108,99,255,0.15);
+      color: var(--color-primary);
+    }
+    .step-item.done .step-num {
+      border-color: var(--color-green);
+      background: rgba(0,229,160,0.12);
+      color: var(--color-green);
+    }
+    .step-connector {
+      width: 40px; height: 2px;
+      background: var(--color-border);
+      align-self: center;
+      flex-shrink: 0;
+    }
+    @media (max-width: 600px) { .step-connector { width: 16px; } }
+
+    /* ── Builder Card ───────────────────────────────────────── */
+    .builder-card {
+      background: var(--color-card);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      padding: 2.5rem;
+      max-width: 780px;
+      margin: 0 auto 3rem;
+    }
+    .builder-step { display: none; }
+    .builder-step.active { display: block; }
+
+    .step-title {
+      font-size: 1.35rem; font-weight: 800;
+      margin-bottom: 0.4rem;
+    }
+    .step-subtitle {
+      color: var(--color-muted); font-size: 0.9rem;
+      margin-bottom: 1.75rem; line-height: 1.6;
+    }
+
+    /* ── Form Elements ──────────────────────────────────────── */
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+    @media (max-width: 600px) { .form-row { grid-template-columns: 1fr; } }
+
+    textarea.form-input {
+      min-height: 130px;
+      resize: vertical;
+      font-family: var(--font-sans);
+    }
+
+    /* ── App Type Grid ──────────────────────────────────────── */
+    .type-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+      gap: 0.75rem;
+      margin-bottom: 1.25rem;
+    }
+    .type-card {
+      background: var(--color-surface);
+      border: 2px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 1rem 0.75rem;
+      text-align: center;
+      cursor: pointer;
+      transition: all var(--transition);
+      user-select: none;
+    }
+    .type-card:hover {
+      border-color: var(--color-primary);
+      background: rgba(108,99,255,0.08);
+    }
+    .type-card.selected {
+      border-color: var(--color-primary);
+      background: rgba(108,99,255,0.18);
+    }
+    .type-card input[type="radio"] { display: none; }
+    .type-icon { font-size: 2rem; display: block; margin-bottom: 0.4rem; }
+    .type-label { font-size: 0.8rem; font-weight: 600; }
+
+    /* ── Feature Checkboxes ─────────────────────────────────── */
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(175px, 1fr));
+      gap: 0.75rem;
+      margin-bottom: 1.25rem;
+    }
+    .feature-check {
+      background: var(--color-surface);
+      border: 2px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 0.75rem 1rem;
+      display: flex; align-items: center; gap: 0.6rem;
+      cursor: pointer;
+      transition: all var(--transition);
+      font-size: 0.85rem; font-weight: 600;
+    }
+    .feature-check:hover { border-color: var(--color-secondary); }
+    .feature-check.checked {
+      border-color: var(--color-secondary);
+      background: rgba(0,212,255,0.08);
+      color: var(--color-secondary);
+    }
+    .feature-check input[type="checkbox"] { display: none; }
+    .feature-check-icon { font-size: 1.1rem; flex-shrink: 0; }
+
+    /* ── GitHub Settings ────────────────────────────────────── */
+    .github-brand {
+      display: flex; align-items: center; gap: 0.75rem;
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 0.9rem 1.1rem;
+      margin-bottom: 1.25rem;
+      font-size: 0.88rem; font-weight: 600;
+    }
+    .github-logo {
+      width: 28px; height: 28px; border-radius: 50%;
+      background: #fff; display: flex; align-items: center; justify-content: center;
+      font-size: 1rem; color: #000; flex-shrink: 0;
+    }
+    .visibility-row {
+      display: flex; gap: 0.75rem; margin-bottom: 1rem;
+    }
+    .vis-btn {
+      flex: 1; padding: 0.6rem; border-radius: var(--radius);
+      border: 2px solid var(--color-border);
+      background: var(--color-surface);
+      color: var(--color-text); font-size: 0.82rem; font-weight: 600;
+      cursor: pointer; transition: all var(--transition); font-family: var(--font-sans);
+    }
+    .vis-btn.active {
+      border-color: var(--color-primary);
+      background: rgba(108,99,255,0.12);
+      color: var(--color-primary);
+    }
+
+    /* ── Build Terminal ─────────────────────────────────────── */
+    .terminal {
+      background: #090912;
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 1.25rem 1.25rem 1rem;
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      line-height: 1.7;
+      min-height: 260px;
+      max-height: 360px;
+      overflow-y: auto;
+      margin-bottom: 1.25rem;
+    }
+    .terminal-line { margin: 0; }
+    .terminal-line.info    { color: #8888aa; }
+    .terminal-line.success { color: #00e5a0; }
+    .terminal-line.warn    { color: #ffd700; }
+    .terminal-line.error   { color: #ff6584; }
+    .terminal-line.primary { color: #a09fff; }
+    .terminal-cursor {
+      display: inline-block;
+      width: 8px; height: 1em;
+      background: #6c63ff;
+      vertical-align: text-bottom;
+      animation: blink 1s step-end infinite;
+    }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+
+    .build-progress {
+      height: 6px;
+      border-radius: 3px;
+      background: var(--color-border);
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .build-progress-bar {
+      height: 100%;
+      border-radius: 3px;
+      background: linear-gradient(90deg, var(--color-primary), var(--color-secondary));
+      width: 0%;
+      transition: width 0.4s ease;
+    }
+
+    .build-status {
+      display: flex; align-items: center; gap: 0.75rem;
+      font-size: 0.9rem; font-weight: 700; margin-bottom: 1.25rem;
+    }
+    .status-dot {
+      width: 10px; height: 10px; border-radius: 50%;
+      background: var(--color-muted);
+      flex-shrink: 0;
+    }
+    .status-dot.running { background: var(--color-primary); animation: pulse 1s ease-in-out infinite; }
+    .status-dot.done    { background: var(--color-green); animation: none; }
+    .status-dot.error   { background: var(--color-accent); animation: none; }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+    /* ── Success Panel ──────────────────────────────────────── */
+    .success-panel {
+      text-align: center; padding: 1.5rem 0;
+    }
+    .success-icon { font-size: 4rem; margin-bottom: 1rem; display: block; }
+    .success-title { font-size: 1.5rem; font-weight: 900; margin-bottom: 0.5rem; }
+    .success-desc  { color: var(--color-muted); font-size: 0.9rem; margin-bottom: 1.5rem; line-height: 1.7; }
+    .result-links {
+      display: flex; gap: 0.75rem; justify-content: center; flex-wrap: wrap;
+    }
+    .result-link {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      padding: 0.65rem 1.25rem; border-radius: var(--radius);
+      font-size: 0.875rem; font-weight: 700;
+      transition: all var(--transition);
+    }
+    .result-link-gh {
+      background: #24292e; color: #fff; border: 2px solid #444;
+    }
+    .result-link-gh:hover { background: #333; color: #fff; }
+    .result-link-live {
+      background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+      color: #fff; border: none;
+    }
+    .result-link-live:hover { opacity: 0.9; color: #fff; }
+
+    /* ── Step Navigation ────────────────────────────────────── */
+    .step-nav {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-top: 2rem; padding-top: 1.5rem;
+      border-top: 1px solid var(--color-border);
+    }
+
+    /* ── Copilot Badge ──────────────────────────────────────── */
+    .copilot-badge {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      background: rgba(108,99,255,0.12);
+      border: 1px solid rgba(108,99,255,0.35);
+      border-radius: 2rem;
+      padding: 0.4rem 1rem;
+      font-size: 0.8rem; font-weight: 700;
+      color: #a09fff;
+      margin-bottom: 2rem;
+    }
+    .copilot-badge .dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: #6c63ff;
+      animation: pulse 1.5s ease-in-out infinite;
+    }
+
+    /* ── Section titles ─────────────────────────────────────── */
+    .field-label-sm {
+      font-size: 0.78rem; font-weight: 700; letter-spacing: 0.05em;
+      text-transform: uppercase; color: var(--color-muted);
+      margin-bottom: 0.6rem; display: block;
+    }
+  </style>
+</head>
+<body>
+
+<!-- ============================================================
+     NAVIGATION
+     ============================================================ -->
+<nav class="nav" role="navigation" aria-label="Main navigation">
+  <a href="../index.html" class="nav-brand" aria-label="Phu AI Core Home">
+    <span class="logo-icon" aria-hidden="true">🧠</span>
+    Phu AI Core
+  </a>
+
+  <button class="hamburger" id="hamburger" aria-label="Toggle navigation" aria-expanded="false" aria-controls="navLinks">
+    <span></span><span></span><span></span>
+  </button>
+
+  <ul class="nav-links" id="navLinks" role="list">
+    <li><a href="../index.html#apps">Apps</a></li>
+    <li><a href="../index.html#features">Features</a></li>
+    <li><a href="../index.html#security">Security</a></li>
+    <li><a href="../index.html#pricing">Pricing</a></li>
+    <li><a href="apps.html">App Library</a></li>
+    <li><a href="terms.html">Terms</a></li>
+    <li><a href="privacy.html">Privacy</a></li>
+    <li><a href="../index.html#pricing" class="nav-cta" data-modal="signupModal">Get Started</a></li>
+  </ul>
+</nav>
+
+<!-- ============================================================
+     PAGE HERO
+     ============================================================ -->
+<div class="page-hero" aria-labelledby="heroHeading">
+  <div class="page-hero-inner">
+
+    <!-- Text Side -->
+    <div class="page-hero-text">
+      <span class="hero-badge"><span aria-hidden="true">🔨</span> No-Code App Builder</span>
+      <h1 class="gradient-text" id="heroHeading">Phu AI App Builder</h1>
+      <p>
+        Describe your app idea in plain language. Copilot GPT 5.3 writes every line of code,
+        creates your GitHub repository, and deploys your app — automatically.
+        No coding required.
+      </p>
+      <div class="copilot-badge" aria-label="Powered by Copilot GPT 5.3">
+        <span class="dot" aria-hidden="true"></span>
+        Powered by Copilot GPT 5.3 &amp; GitHub
+      </div>
+      <div style="margin-top:1.75rem; display:flex; gap:0.75rem; flex-wrap:wrap;">
+        <a href="#main" class="btn btn-primary" style="display:inline-flex; align-items:center; gap:0.5rem;">
+          Start Building <span aria-hidden="true">🚀</span>
+        </a>
+        <a href="apps.html" class="btn" style="background:var(--color-surface); color:var(--color-text); border:1px solid var(--color-border); display:inline-flex; align-items:center; gap:0.5rem;">
+          App Library <span aria-hidden="true">→</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- Visual Side -->
+    <div class="page-hero-visual">
+      <div class="hero-image-wrap">
+        <div class="hero-image-glow" aria-hidden="true"></div>
+        <div class="hero-image-ring" aria-hidden="true"></div>
+        <img
+          src="https://github.com/user-attachments/assets/fbb160f0-7d86-42f8-9c56-e75974c73d40"
+          alt="A human communicating with an advanced AI spacecraft — representing Copilot GPT 5.3 building your app automatically"
+          class="hero-image"
+          loading="eager"
+          width="420"
+          height="420"
+          onerror="this.style.display='none';this.nextElementSibling.style.display='flex';"
+        />
+        <div aria-hidden="true" style="display:none; width:min(420px,90vw); height:min(420px,90vw); border-radius:50%; background:radial-gradient(circle,rgba(108,99,255,0.35) 0%,rgba(0,212,255,0.15) 60%,transparent 80%); align-items:center; justify-content:center; font-size:8rem; position:relative; z-index:1;">🤖</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ============================================================
+     WIZARD
+     ============================================================ -->
+<main id="main">
+<div class="container" style="max-width:900px;">
+
+  <!-- Stepper -->
+  <nav class="stepper" aria-label="App builder steps" id="stepperNav">
+    <div class="step-item active" data-step="1" id="stepIndicator1">
+      <span class="step-num" aria-hidden="true">1</span> Describe
+    </div>
+    <div class="step-connector" aria-hidden="true"></div>
+    <div class="step-item" data-step="2" id="stepIndicator2">
+      <span class="step-num" aria-hidden="true">2</span> Features
+    </div>
+    <div class="step-connector" aria-hidden="true"></div>
+    <div class="step-item" data-step="3" id="stepIndicator3">
+      <span class="step-num" aria-hidden="true">3</span> GitHub
+    </div>
+    <div class="step-connector" aria-hidden="true"></div>
+    <div class="step-item" data-step="4" id="stepIndicator4">
+      <span class="step-num" aria-hidden="true">4</span> Build
+    </div>
+  </nav>
+
+  <!-- Builder Card -->
+  <div class="builder-card" id="builderCard">
+
+    <!-- ── Step 1: Describe Your App ─────────────────────────── -->
+    <div class="builder-step active" id="step1" role="region" aria-labelledby="step1Title">
+      <h2 class="step-title" id="step1Title">✏️ Describe Your App</h2>
+      <p class="step-subtitle">
+        Tell Copilot GPT 5.3 what you want to build. The more detail you provide,
+        the better the generated app. No coding knowledge required.
+      </p>
+
+      <div class="form-group">
+        <label class="form-label" for="appName">
+          App Name <span aria-hidden="true" style="color:var(--color-accent)">*</span>
+        </label>
+        <input
+          class="form-input"
+          type="text"
+          id="appName"
+          placeholder="e.g. Task Tracker Pro"
+          maxlength="60"
+          autocomplete="off"
+        />
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="appDescription">
+          App Description <span aria-hidden="true" style="color:var(--color-accent)">*</span>
+        </label>
+        <textarea
+          class="form-input"
+          id="appDescription"
+          placeholder="Describe what your app does, who it is for, and any specific functionality you want — e.g. 'A to-do list app where users can create tasks, set deadlines, assign priority levels, and track progress with a dashboard.'"
+        ></textarea>
+      </div>
+
+      <span class="field-label-sm">App Type</span>
+      <div class="type-grid" role="radiogroup" aria-label="Choose app type" id="appTypeGrid">
+        <label class="type-card selected" for="typeWeb">
+          <input type="radio" name="appType" id="typeWeb" value="Web App" checked />
+          <span class="type-icon" aria-hidden="true">🌐</span>
+          <span class="type-label">Web App</span>
+        </label>
+        <label class="type-card" for="typeDashboard">
+          <input type="radio" name="appType" id="typeDashboard" value="Dashboard" />
+          <span class="type-icon" aria-hidden="true">📊</span>
+          <span class="type-label">Dashboard</span>
+        </label>
+        <label class="type-card" for="typeLanding">
+          <input type="radio" name="appType" id="typeLanding" value="Landing Page" />
+          <span class="type-icon" aria-hidden="true">🚀</span>
+          <span class="type-label">Landing Page</span>
+        </label>
+        <label class="type-card" for="typeEcom">
+          <input type="radio" name="appType" id="typeEcom" value="E-Commerce" />
+          <span class="type-icon" aria-hidden="true">🛒</span>
+          <span class="type-label">E-Commerce</span>
+        </label>
+        <label class="type-card" for="typeGame">
+          <input type="radio" name="appType" id="typeGame" value="Game" />
+          <span class="type-icon" aria-hidden="true">🎮</span>
+          <span class="type-label">Game</span>
+        </label>
+        <label class="type-card" for="typeAPI">
+          <input type="radio" name="appType" id="typeAPI" value="API / Backend" />
+          <span class="type-icon" aria-hidden="true">⚙️</span>
+          <span class="type-label">API / Backend</span>
+        </label>
+        <label class="type-card" for="typeMobile">
+          <input type="radio" name="appType" id="typeMobile" value="Mobile App" />
+          <span class="type-icon" aria-hidden="true">📱</span>
+          <span class="type-label">Mobile App</span>
+        </label>
+        <label class="type-card" for="typeAI">
+          <input type="radio" name="appType" id="typeAI" value="AI Tool" />
+          <span class="type-icon" aria-hidden="true">🤖</span>
+          <span class="type-label">AI Tool</span>
+        </label>
+      </div>
+
+      <div class="step-nav">
+        <span></span>
+        <button class="btn btn-primary" id="step1Next">
+          Next: Choose Features <span aria-hidden="true">→</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- ── Step 2: Choose Features ───────────────────────────── -->
+    <div class="builder-step" id="step2" role="region" aria-labelledby="step2Title">
+      <h2 class="step-title" id="step2Title">⚡ Choose Features</h2>
+      <p class="step-subtitle">
+        Select the features you want Copilot GPT 5.3 to include in your app.
+        You can add or remove these after building.
+      </p>
+
+      <div class="feature-grid" id="featureGrid" role="group" aria-label="Select app features">
+        <label class="feature-check" for="featAuth">
+          <input type="checkbox" id="featAuth" value="User Authentication" />
+          <span class="feature-check-icon" aria-hidden="true">🔐</span> User Authentication
+        </label>
+        <label class="feature-check" for="featDB">
+          <input type="checkbox" id="featDB" value="Database / Storage" />
+          <span class="feature-check-icon" aria-hidden="true">🗄️</span> Database / Storage
+        </label>
+        <label class="feature-check" for="featAI">
+          <input type="checkbox" id="featAI" value="AI / Copilot GPT 5.3" checked />
+          <span class="feature-check-icon" aria-hidden="true">🤖</span> AI / Copilot GPT 5.3
+        </label>
+        <label class="feature-check" for="featPayments">
+          <input type="checkbox" id="featPayments" value="Payments (Stripe)" />
+          <span class="feature-check-icon" aria-hidden="true">💳</span> Payments (Stripe)
+        </label>
+        <label class="feature-check" for="featAnalytics">
+          <input type="checkbox" id="featAnalytics" value="Analytics Dashboard" />
+          <span class="feature-check-icon" aria-hidden="true">📈</span> Analytics Dashboard
+        </label>
+        <label class="feature-check" for="featNotifs">
+          <input type="checkbox" id="featNotifs" value="Push Notifications" />
+          <span class="feature-check-icon" aria-hidden="true">🔔</span> Push Notifications
+        </label>
+        <label class="feature-check" for="featSearch">
+          <input type="checkbox" id="featSearch" value="Search" />
+          <span class="feature-check-icon" aria-hidden="true">🔍</span> Search
+        </label>
+        <label class="feature-check" for="featEmail">
+          <input type="checkbox" id="featEmail" value="Email Integration" />
+          <span class="feature-check-icon" aria-hidden="true">📧</span> Email Integration
+        </label>
+        <label class="feature-check" for="featAPI">
+          <input type="checkbox" id="featAPI" value="REST API" />
+          <span class="feature-check-icon" aria-hidden="true">🔗</span> REST API
+        </label>
+        <label class="feature-check" for="featDark">
+          <input type="checkbox" id="featDark" value="Dark Mode" checked />
+          <span class="feature-check-icon" aria-hidden="true">🌙</span> Dark Mode
+        </label>
+        <label class="feature-check" for="featI18n">
+          <input type="checkbox" id="featI18n" value="Multi-language (i18n)" />
+          <span class="feature-check-icon" aria-hidden="true">🌍</span> Multi-language
+        </label>
+        <label class="feature-check" for="featCICD">
+          <input type="checkbox" id="featCICD" value="CI/CD Pipeline" checked />
+          <span class="feature-check-icon" aria-hidden="true">🚀</span> CI/CD Pipeline
+        </label>
+      </div>
+
+      <div class="step-nav">
+        <button class="btn" id="step2Back" style="background:var(--color-surface); color:var(--color-text); border:1px solid var(--color-border);">
+          <span aria-hidden="true">←</span> Back
+        </button>
+        <button class="btn btn-primary" id="step2Next">
+          Next: GitHub Settings <span aria-hidden="true">→</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- ── Step 3: GitHub Settings ───────────────────────────── -->
+    <div class="builder-step" id="step3" role="region" aria-labelledby="step3Title">
+      <h2 class="step-title" id="step3Title">🐙 GitHub Settings</h2>
+      <p class="step-subtitle">
+        Copilot GPT 5.3 will create a new GitHub repository, commit all generated code,
+        and set up GitHub Actions for automatic deployment.
+      </p>
+
+      <div class="github-brand" aria-label="GitHub integration">
+        <span class="github-logo" aria-hidden="true">⬡</span>
+        <div>
+          <div style="font-size:0.9rem;font-weight:800;">GitHub Integration</div>
+          <div style="font-size:0.78rem;color:var(--color-muted);">Your app will be pushed to a new repository automatically</div>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label" for="ghUsername">
+            GitHub Username <span aria-hidden="true" style="color:var(--color-accent)">*</span>
+          </label>
+          <input
+            class="form-input"
+            type="text"
+            id="ghUsername"
+            placeholder="your-github-username"
+            autocomplete="username"
+          />
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="ghRepo">
+            Repository Name <span aria-hidden="true" style="color:var(--color-accent)">*</span>
+          </label>
+          <input
+            class="form-input"
+            type="text"
+            id="ghRepo"
+            placeholder="my-awesome-app"
+            autocomplete="off"
+          />
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="ghBranch">Default Branch</label>
+        <input
+          class="form-input"
+          type="text"
+          id="ghBranch"
+          value="main"
+          autocomplete="off"
+        />
+      </div>
+
+      <span class="field-label-sm">Repository Visibility</span>
+      <div class="visibility-row" role="group" aria-label="Repository visibility">
+        <button type="button" class="vis-btn active" id="visPublic" aria-pressed="true">🌐 Public</button>
+        <button type="button" class="vis-btn" id="visPrivate" aria-pressed="false">🔒 Private</button>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="deployTarget">Deployment Target</label>
+        <select class="form-input form-select" id="deployTarget">
+          <option value="github-pages">GitHub Pages (free static hosting)</option>
+          <option value="azure">Azure App Service</option>
+          <option value="vercel">Vercel</option>
+          <option value="netlify">Netlify</option>
+          <option value="none">None — code only</option>
+        </select>
+      </div>
+
+      <div class="step-nav">
+        <button class="btn" id="step3Back" style="background:var(--color-surface); color:var(--color-text); border:1px solid var(--color-border);">
+          <span aria-hidden="true">←</span> Back
+        </button>
+        <button class="btn btn-primary" id="step3Next">
+          Build My App 🚀
+        </button>
+      </div>
+    </div>
+
+    <!-- ── Step 4: Build & Deploy ─────────────────────────────── -->
+    <div class="builder-step" id="step4" role="region" aria-labelledby="step4Title">
+      <h2 class="step-title" id="step4Title">🔨 Building Your App</h2>
+      <p class="step-subtitle" id="step4Subtitle">
+        Copilot GPT 5.3 is generating your code and setting up GitHub. This takes about 30 seconds.
+      </p>
+
+      <div class="build-status" id="buildStatus" aria-live="polite" aria-atomic="true">
+        <span class="status-dot running" id="statusDot" aria-hidden="true"></span>
+        <span id="statusText">Initialising Copilot GPT 5.3…</span>
+      </div>
+
+      <div class="build-progress" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" id="buildProgressBar" aria-label="Build progress">
+        <div class="build-progress-bar" id="buildBar"></div>
+      </div>
+
+      <div class="terminal" id="buildTerminal" aria-label="Build log" aria-live="polite"></div>
+
+      <!-- Success Panel (hidden until build completes) -->
+      <div class="success-panel" id="successPanel" style="display:none;" aria-live="polite">
+        <span class="success-icon" aria-hidden="true">🎉</span>
+        <h3 class="success-title gradient-text">Your App is Ready!</h3>
+        <p class="success-desc" id="successDesc">
+          Copilot GPT 5.3 has generated your app, pushed all code to GitHub,
+          and deployed it successfully.
+        </p>
+        <div class="result-links" id="resultLinks">
+          <a href="#" class="result-link result-link-gh" id="repoLink" target="_blank" rel="noopener noreferrer">
+            <span aria-hidden="true">⬡</span> View GitHub Repo
+          </a>
+          <a href="#" class="result-link result-link-live" id="liveLink" target="_blank" rel="noopener noreferrer">
+            <span aria-hidden="true">🌐</span> Open Live App
+          </a>
+        </div>
+      </div>
+
+      <div class="step-nav" id="step4Nav">
+        <button class="btn" id="step4Back" style="background:var(--color-surface); color:var(--color-text); border:1px solid var(--color-border);">
+          <span aria-hidden="true">←</span> Back
+        </button>
+        <button class="btn btn-primary" id="buildAnotherBtn" style="display:none;" data-modal="signupModal">
+          Build Another App 🔨
+        </button>
+      </div>
+    </div>
+
+  </div><!-- /builder-card -->
+
+  <!-- How It Works -->
+  <section aria-labelledby="howTitle" style="padding:3rem 0;">
+    <div style="text-align:center; margin-bottom:2rem;">
+      <span class="section-tag">⚙️ How It Works</span>
+      <h2 class="section-title" id="howTitle">From idea to live app in minutes</h2>
+    </div>
+    <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:1.5rem;">
+      <div class="app-card fade-in" style="text-align:center;">
+        <div style="font-size:2.5rem; margin-bottom:0.75rem;">💬</div>
+        <h3 style="font-size:1rem; font-weight:800; margin-bottom:0.5rem;">1. Describe</h3>
+        <p style="font-size:0.85rem; color:var(--color-muted); line-height:1.6;">
+          Tell Copilot GPT 5.3 what you want to build in plain English — no tech knowledge needed.
+        </p>
+      </div>
+      <div class="app-card fade-in" style="text-align:center;">
+        <div style="font-size:2.5rem; margin-bottom:0.75rem;">🤖</div>
+        <h3 style="font-size:1rem; font-weight:800; margin-bottom:0.5rem;">2. AI Generates</h3>
+        <p style="font-size:0.85rem; color:var(--color-muted); line-height:1.6;">
+          Copilot GPT 5.3 writes every file — HTML, CSS, JavaScript, backend logic, and tests.
+        </p>
+      </div>
+      <div class="app-card fade-in" style="text-align:center;">
+        <div style="font-size:2.5rem; margin-bottom:0.75rem;">🐙</div>
+        <h3 style="font-size:1rem; font-weight:800; margin-bottom:0.5rem;">3. GitHub Push</h3>
+        <p style="font-size:0.85rem; color:var(--color-muted); line-height:1.6;">
+          A new GitHub repository is created automatically with all your generated code committed.
+        </p>
+      </div>
+      <div class="app-card fade-in" style="text-align:center;">
+        <div style="font-size:2.5rem; margin-bottom:0.75rem;">🚀</div>
+        <h3 style="font-size:1rem; font-weight:800; margin-bottom:0.5rem;">4. Auto Deploy</h3>
+        <p style="font-size:0.85rem; color:var(--color-muted); line-height:1.6;">
+          GitHub Actions CI/CD deploys your app live. Share your URL instantly.
+        </p>
+      </div>
+    </div>
+  </section>
+
+</div>
+</main>
+
+<!-- ============================================================
+     FOOTER
+     ============================================================ -->
+<footer class="footer" role="contentinfo">
+  <div class="container">
+    <div class="footer-bottom">
+      <span>© <span id="footerYear">2025</span> Phu AI Core. All rights reserved.</span>
+      <div class="footer-bottom-links">
+        <a href="../index.html">Home</a>
+        <a href="apps.html">App Library</a>
+        <a href="terms.html">Terms</a>
+        <a href="privacy.html">Privacy</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- SIGN-UP MODAL -->
+<div class="modal-overlay" id="signupModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+  <div class="modal">
+    <button class="modal-close" aria-label="Close sign-up form">✕</button>
+    <h2 class="modal-title" id="modalTitle">🚀 Get Started with Phu AI Core</h2>
+    <p class="modal-subtitle">Create your account and choose a plan. 7-day free trial included.</p>
+
+    <form id="signupForm" novalidate>
+      <div class="form-group">
+        <label class="form-label" for="signupName">Full Name <span aria-hidden="true" style="color:var(--color-accent)">*</span></label>
+        <input class="form-input" type="text" id="signupName" name="name" placeholder="Your full name" required autocomplete="name" />
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="signupEmail">Email Address <span aria-hidden="true" style="color:var(--color-accent)">*</span></label>
+        <input class="form-input" type="email" id="signupEmail" name="email" placeholder="you@example.com" required autocomplete="email" />
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="signupPlan">Select Plan <span aria-hidden="true" style="color:var(--color-accent)">*</span></label>
+        <select class="form-input form-select" id="signupPlan" name="plan" required>
+          <option value="">— Choose a plan —</option>
+          <option value="Starter ($11.99/mo)">Starter — $11.99/month</option>
+          <option value="Basic ($19.99/mo)">Basic — $19.99/month</option>
+          <option value="Standard ($28.99/mo)">Standard — $28.99/month</option>
+          <option value="Plus ($36.99/mo)">Plus — $36.99/month ⭐ Popular</option>
+          <option value="Phu AI ($49.99/mo)">Phu AI — $49.99/month</option>
+          <option value="Phu AI Pro ($59.99/mo)">Phu AI Pro — $59.99/month</option>
+          <option value="Revenue Automation ($69.99/mo)">Revenue Automation — $69.99/month</option>
+          <option value="Yearly All-Access ($102.99/yr)">Yearly All-Access — $102.99/year 🔥 Best Value</option>
+        </select>
+      </div>
+      <button type="submit" class="pricing-btn pricing-btn-primary" style="width:100%; margin-top:0.5rem;">
+        Start Free Trial
+      </button>
+      <p style="font-size:0.75rem; color:var(--color-muted); text-align:center; margin-top:1rem; line-height:1.5;">
+        By signing up you agree to our
+        <a href="terms.html" target="_blank">Terms of Service</a> and
+        <a href="privacy.html" target="_blank">Privacy Policy</a>.
+        You will not be charged during the 7-day trial.
+      </p>
+    </form>
+  </div>
+</div>
+
+<!-- Toast container -->
+<div class="toast-container" aria-live="polite" aria-atomic="true"></div>
+
+<script src="../js/app.js"></script>
+<script>
+'use strict';
+
+document.getElementById('footerYear').textContent = new Date().getFullYear();
+
+/* ============================================================
+   APP TYPE SELECTOR
+   ============================================================ */
+(function () {
+  const grid = document.getElementById('appTypeGrid');
+  if (!grid) return;
+
+  grid.querySelectorAll('.type-card').forEach(card => {
+    card.addEventListener('click', () => {
+      grid.querySelectorAll('.type-card').forEach(c => c.classList.remove('selected'));
+      card.classList.add('selected');
+    });
+  });
+})();
+
+/* ============================================================
+   FEATURE CHECKBOXES
+   ============================================================ */
+(function () {
+  const grid = document.getElementById('featureGrid');
+  if (!grid) return;
+
+  // Sync initial checked state from HTML
+  grid.querySelectorAll('.feature-check').forEach(label => {
+    const cb = label.querySelector('input[type="checkbox"]');
+    if (cb && cb.checked) label.classList.add('checked');
+
+    label.addEventListener('click', () => {
+      label.classList.toggle('checked');
+    });
+  });
+})();
+
+/* ============================================================
+   VISIBILITY TOGGLE
+   ============================================================ */
+(function () {
+  const pub  = document.getElementById('visPublic');
+  const priv = document.getElementById('visPrivate');
+  if (!pub || !priv) return;
+
+  function setVis(active, inactive) {
+    active.classList.add('active');
+    active.setAttribute('aria-pressed', 'true');
+    inactive.classList.remove('active');
+    inactive.setAttribute('aria-pressed', 'false');
+  }
+
+  pub.addEventListener('click',  () => setVis(pub, priv));
+  priv.addEventListener('click', () => setVis(priv, pub));
+})();
+
+/* ============================================================
+   AUTO-SLUG REPO NAME FROM APP NAME
+   ============================================================ */
+(function () {
+  const nameInput = document.getElementById('appName');
+  const repoInput = document.getElementById('ghRepo');
+  if (!nameInput || !repoInput) return;
+
+  nameInput.addEventListener('input', () => {
+    if (!repoInput.dataset.userEdited) {
+      repoInput.value = nameInput.value
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/^-+|-+$/g, '');
+    }
+  });
+
+  repoInput.addEventListener('input', () => {
+    repoInput.dataset.userEdited = '1';
+  });
+})();
+
+/* ============================================================
+   STEPPER NAVIGATION
+   ============================================================ */
+(function () {
+  let currentStep = 1;
+  const totalSteps = 4;
+
+  function updateStepper(step) {
+    for (let i = 1; i <= totalSteps; i++) {
+      const indicator = document.getElementById('stepIndicator' + i);
+      if (!indicator) continue;
+      indicator.classList.remove('active', 'done');
+      if (i < step)  indicator.classList.add('done');
+      if (i === step) indicator.classList.add('active');
+      indicator.querySelector('.step-num').textContent = i < step ? '✓' : String(i);
+    }
+  }
+
+  function showStep(n) {
+    for (let i = 1; i <= totalSteps; i++) {
+      const el = document.getElementById('step' + i);
+      if (el) el.classList.toggle('active', i === n);
+    }
+    updateStepper(n);
+    currentStep = n;
+    window.scrollTo({ top: document.getElementById('builderCard').offsetTop - 80, behavior: 'smooth' });
+  }
+
+  // Step 1 → 2
+  document.getElementById('step1Next').addEventListener('click', () => {
+    const name = document.getElementById('appName').value.trim();
+    const desc = document.getElementById('appDescription').value.trim();
+    if (!name) {
+      Toast.show('Please enter an app name.', 'error');
+      document.getElementById('appName').focus();
+      return;
+    }
+    if (!desc) {
+      Toast.show('Please describe your app.', 'error');
+      document.getElementById('appDescription').focus();
+      return;
+    }
+    showStep(2);
+  });
+
+  // Step 2 → 1
+  document.getElementById('step2Back').addEventListener('click', () => showStep(1));
+
+  // Step 2 → 3
+  document.getElementById('step2Next').addEventListener('click', () => showStep(3));
+
+  // Step 3 → 2
+  document.getElementById('step3Back').addEventListener('click', () => showStep(2));
+
+  // Step 3 → 4 (start build)
+  document.getElementById('step3Next').addEventListener('click', () => {
+    const user = document.getElementById('ghUsername').value.trim();
+    const repo = document.getElementById('ghRepo').value.trim();
+    if (!user) {
+      Toast.show('Please enter your GitHub username.', 'error');
+      document.getElementById('ghUsername').focus();
+      return;
+    }
+    if (!repo) {
+      Toast.show('Please enter a repository name.', 'error');
+      document.getElementById('ghRepo').focus();
+      return;
+    }
+    showStep(4);
+    startBuild(user, repo);
+  });
+
+  // Step 4 → 3
+  document.getElementById('step4Back').addEventListener('click', () => {
+    if (document.getElementById('successPanel').style.display !== 'none') return;
+    showStep(3);
+  });
+})();
+
+/* ============================================================
+   BUILD SIMULATION
+   ============================================================ */
+
+/** Ensure a URL only uses https: scheme — prevents javascript: injections */
+function safeUrl(url) {
+  try {
+    const parsed = new URL(url);
+    return parsed.protocol === 'https:' ? url : '#';
+  } catch (_) {
+    return '#';
+  }
+}
+
+function startBuild(ghUser, ghRepo) {
+  const terminal    = document.getElementById('buildTerminal');
+  const bar         = document.getElementById('buildBar');
+  const progressEl  = document.getElementById('buildProgressBar');
+  const statusDot   = document.getElementById('statusDot');
+  const statusText  = document.getElementById('statusText');
+  const successPanel = document.getElementById('successPanel');
+  const step4Back   = document.getElementById('step4Back');
+  const buildAnotherBtn = document.getElementById('buildAnotherBtn');
+
+  const appName = document.getElementById('appName').value.trim();
+  const appType = document.querySelector('input[name="appType"]:checked')?.value || 'Web App';
+  const features = Array.from(document.querySelectorAll('.feature-check input:checked')).map(i => i.value);
+  const deployTarget = document.getElementById('deployTarget').value;
+  const isPrivate = document.getElementById('visPrivate').classList.contains('active');
+  const branch = document.getElementById('ghBranch').value.trim() || 'main';
+
+  // Sanitize user-provided values used in URLs
+  const safeUser = encodeURIComponent(ghUser).replace(/%2F/g, '');
+  const safeRepo = encodeURIComponent(ghRepo).replace(/%2F/g, '');
+  const repoURL = safeUrl('https://github.com/' + safeUser + '/' + safeRepo);
+  const liveURL = deployTarget === 'github-pages'
+    ? safeUrl('https://' + safeUser + '.github.io/' + safeRepo)
+    : repoURL;
+
+  terminal.innerHTML = '';
+  bar.style.width = '0%';
+  progressEl.setAttribute('aria-valuenow', '0');
+  statusDot.className = 'status-dot running';
+  step4Back.disabled = true;
+
+  let lineIdx = 0;
+
+  const buildLines = [
+    { cls: 'info',    text: '$ copilot-gpt5.3 init --app "' + appName + '" --type ' + appType },
+    { cls: 'primary', text: '  [Copilot GPT 5.3] Analyzing requirements…' },
+    { cls: 'info',    text: '  [Copilot GPT 5.3] Planning architecture for ' + appType + '…' },
+    { cls: 'primary', text: '  [Copilot GPT 5.3] Generating project scaffold…' },
+    { cls: 'success', text: '  ✓ Project scaffold created' },
+    { cls: 'info',    text: '$ copilot-gpt5.3 generate --features ' + features.slice(0, 3).join(',') },
+    { cls: 'primary', text: '  [Copilot GPT 5.3] Writing source files…' },
+    { cls: 'info',    text: '  Generating index.html…' },
+    { cls: 'info',    text: '  Generating styles.css…' },
+    { cls: 'info',    text: '  Generating app.js…' },
+    features.includes('User Authentication')   ? { cls: 'info', text: '  Generating auth.js…' }          : null,
+    features.includes('Database / Storage')    ? { cls: 'info', text: '  Generating db.js…' }            : null,
+    features.includes('REST API')              ? { cls: 'info', text: '  Generating api/routes.js…' }     : null,
+    features.includes('Payments (Stripe)')     ? { cls: 'info', text: '  Generating payments.js…' }      : null,
+    { cls: 'success', text: '  ✓ All source files generated (' + (8 + features.length) + ' files)' },
+    features.includes('CI/CD Pipeline') ? { cls: 'info', text: '  Generating .github/workflows/deploy.yml…' } : null,
+    features.includes('CI/CD Pipeline') ? { cls: 'success', text: '  ✓ GitHub Actions workflow configured' } : null,
+    { cls: 'info',    text: '$ gh repo create ' + ghUser + '/' + ghRepo + (isPrivate ? ' --private' : ' --public') },
+    { cls: 'primary', text: '  Authenticating with GitHub…' },
+    { cls: 'success', text: '  ✓ Repository created: ' + repoURL },
+    { cls: 'info',    text: '$ git init && git add . && git commit -m "Initial commit from Copilot GPT 5.3"' },
+    { cls: 'success', text: '  ✓ Initial commit created' },
+    { cls: 'info',    text: '$ git push origin ' + branch },
+    { cls: 'success', text: '  ✓ Code pushed to ' + repoURL },
+    deployTarget !== 'none'
+      ? { cls: 'info', text: '$ gh actions run deploy --ref ' + branch }
+      : null,
+    deployTarget !== 'none'
+      ? { cls: 'primary', text: '  [GitHub Actions] Deploying to ' + deployTarget + '…' }
+      : null,
+    deployTarget !== 'none'
+      ? { cls: 'success', text: '  ✓ Deployment successful → ' + liveURL }
+      : null,
+    { cls: 'success', text: '' },
+    { cls: 'success', text: '🎉  Build complete! Your app "' + appName + '" is live.' },
+  ].filter(Boolean);
+
+  const totalLines = buildLines.length;
+
+  function addLine(line) {
+    const p = document.createElement('p');
+    p.className = 'terminal-line ' + line.cls;
+    p.textContent = line.text;
+    terminal.appendChild(p);
+    terminal.scrollTop = terminal.scrollHeight;
+
+    const progress = Math.round(((lineIdx + 1) / totalLines) * 100);
+    bar.style.width = progress + '%';
+    progressEl.setAttribute('aria-valuenow', String(progress));
+    statusText.textContent = line.text.replace(/^\$\s*/, '').replace(/^\[.*?\]\s*/, '') || 'Building…';
+  }
+
+  function addCursor() {
+    const p = document.createElement('p');
+    p.className = 'terminal-line';
+    p.innerHTML = '<span class="terminal-cursor" aria-hidden="true"></span>';
+    p.id = 'termCursor';
+    terminal.appendChild(p);
+    terminal.scrollTop = terminal.scrollHeight;
+  }
+
+  addCursor();
+
+  function nextLine() {
+    const cursor = document.getElementById('termCursor');
+    if (cursor) cursor.remove();
+
+    if (lineIdx < totalLines) {
+      addLine(buildLines[lineIdx]);
+      lineIdx++;
+
+      const delay = lineIdx < 5 ? 600 : lineIdx < 15 ? 350 : 200;
+
+      if (lineIdx < totalLines) {
+        addCursor();
+        setTimeout(nextLine, delay);
+      } else {
+        // Build complete
+        bar.style.width = '100%';
+        progressEl.setAttribute('aria-valuenow', '100');
+        statusDot.className = 'status-dot done';
+        statusText.textContent = 'Build complete!';
+
+        document.getElementById('repoLink').href = repoURL;
+        document.getElementById('liveLink').href = liveURL;
+        if (deployTarget === 'none') {
+          document.getElementById('liveLink').style.display = 'none';
+        }
+        document.getElementById('successDesc').textContent =
+          'Copilot GPT 5.3 generated your ' + appType + ' app "' + appName +
+          '", pushed all code to GitHub, and ' +
+          (deployTarget !== 'none' ? 'deployed it to ' + deployTarget + '.' : 'committed the code to your repository.');
+
+        successPanel.style.display = 'block';
+        step4Back.disabled = false;
+        buildAnotherBtn.style.display = 'inline-flex';
+
+        Toast.show('🎉 "' + appName + '" built and deployed successfully!', 'success', 6000);
+      }
+    }
+  }
+
+  setTimeout(nextLine, 400);
+}
+</script>
+</body>
+</html>
