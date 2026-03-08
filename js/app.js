@@ -98,9 +98,9 @@
   const monthlyLabel = document.getElementById('monthlyLabel');
   const yearlyLabel  = document.getElementById('yearlyLabel');
 
-  toggleBtn.addEventListener('click', () => {
-    isYearly = !isYearly;
+  function applyToggle() {
     toggleBtn.classList.toggle('on', isYearly);
+    toggleBtn.setAttribute('aria-checked', String(isYearly));
 
     if (monthlyLabel) monthlyLabel.classList.toggle('active', !isYearly);
     if (yearlyLabel)  yearlyLabel.classList.toggle('active', isYearly);
@@ -118,6 +118,20 @@
         if (noteEl) noteEl.textContent = '/month';
       }
     });
+  }
+
+  toggleBtn.addEventListener('click', () => {
+    isYearly = !isYearly;
+    applyToggle();
+  });
+
+  // Keyboard support for role="switch"
+  toggleBtn.addEventListener('keydown', e => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      isYearly = !isYearly;
+      applyToggle();
+    }
   });
 })();
 
@@ -130,7 +144,6 @@ const Modal = (function () {
     if (!overlay) return;
     overlay.classList.add('open');
     document.body.style.overflow = 'hidden';
-    overlay.querySelector('.modal')?.setAttribute('role', 'dialog');
   }
 
   function close(id) {
@@ -357,7 +370,7 @@ document.querySelectorAll('a[href^="#"]').forEach(link => {
   window.addEventListener('scroll', () => {
     const visible = window.scrollY > 400;
     btn.style.opacity = visible ? '1' : '0';
-    btn.style.pointerEvents = visible ? 'all' : 'none';
+    btn.style.pointerEvents = visible ? 'auto' : 'none';
   }, { passive: true });
 
   btn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
