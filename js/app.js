@@ -187,7 +187,12 @@ const Toast = (function () {
     const icons = { success: '✅', error: '❌', info: 'ℹ️', warning: '⚠️' };
     const toast = document.createElement('div');
     toast.className = `toast ${type}`;
-    toast.innerHTML = `<span>${icons[type] || 'ℹ️'}</span><span>${message}</span>`;
+    const iconSpan = document.createElement('span');
+    iconSpan.textContent = icons[type] || 'ℹ️';
+    const msgSpan = document.createElement('span');
+    msgSpan.textContent = message;
+    toast.appendChild(iconSpan);
+    toast.appendChild(msgSpan);
     container.appendChild(toast);
 
     // Trigger animation
@@ -235,16 +240,19 @@ const Toast = (function () {
       btn.innerHTML = '<span class="spinner"></span> Processing…';
     }
 
-    await new Promise(r => setTimeout(r, 1500));
-
-    if (btn) {
-      btn.disabled = false;
-      btn.textContent = 'Get Started';
+    try {
+      await new Promise(r => setTimeout(r, 1500));
+      Modal.closeAll();
+      Toast.show(`Welcome, ${name}! Your ${plan} subscription has been activated. Check your email for details.`, 'success', 6000);
+      form.reset();
+    } catch (err) {
+      Toast.show('An error occurred. Please try again.', 'error');
+    } finally {
+      if (btn) {
+        btn.disabled = false;
+        btn.textContent = 'Get Started';
+      }
     }
-
-    Modal.closeAll();
-    Toast.show(`Welcome, ${name}! Your ${plan} subscription has been activated. Check your email for details.`, 'success', 6000);
-    form.reset();
   });
 })();
 
