@@ -580,8 +580,8 @@
           <span class="feature-check-icon" aria-hidden="true">🗄️</span> Database / Storage
         </label>
         <label class="feature-check" for="featAI">
-          <input type="checkbox" id="featAI" value="AI / Copilot GPT 5.4" checked />
-          <span class="feature-check-icon" aria-hidden="true">🤖</span> AI / Copilot GPT 5.4
+          <input type="checkbox" id="featAI" value="AI / Copilot Integration" checked />
+          <span class="feature-check-icon" aria-hidden="true">🤖</span> AI / Copilot Integration
         </label>
         <label class="feature-check" for="featPayments">
           <input type="checkbox" id="featPayments" value="Payments (Stripe)" />
@@ -1070,14 +1070,17 @@ function startBuild(ghUser, ghRepo) {
 
   let lineIdx = 0;
 
+  const copilotModel = 'Copilot GPT 5.4';
+  const copilotCli = 'copilot-gpt5.4';
+
   const buildLines = [
-    { cls: 'info',    text: '$ copilot-gpt5.4 init --app "' + appName + '" --type ' + appType },
-    { cls: 'primary', text: '  [Copilot GPT 5.4] Analyzing requirements…' },
-    { cls: 'info',    text: '  [Copilot GPT 5.4] Planning architecture for ' + appType + '…' },
-    { cls: 'primary', text: '  [Copilot GPT 5.4] Generating project scaffold…' },
+    { cls: 'info',    text: '$ ' + copilotCli + ' init --app "' + appName + '" --type ' + appType },
+    { cls: 'primary', text: '  [' + copilotModel + '] Analyzing requirements…' },
+    { cls: 'info',    text: '  [' + copilotModel + '] Planning architecture for ' + appType + '…' },
+    { cls: 'primary', text: '  [' + copilotModel + '] Generating project scaffold…' },
     { cls: 'success', text: '  ✓ Project scaffold created' },
-    { cls: 'info',    text: '$ copilot-gpt5.4 generate --features ' + features.slice(0, 3).join(',') },
-    { cls: 'primary', text: '  [Copilot GPT 5.4] Writing source files…' },
+    { cls: 'info',    text: '$ ' + copilotCli + ' generate --features ' + features.slice(0, 3).join(',') },
+    { cls: 'primary', text: '  [' + copilotModel + '] Writing source files…' },
     { cls: 'info',    text: '  Generating index.html…' },
     { cls: 'info',    text: '  Generating styles.css…' },
     { cls: 'info',    text: '  Generating app.js…' },
@@ -1091,7 +1094,7 @@ function startBuild(ghUser, ghRepo) {
     { cls: 'info',    text: '$ gh repo create ' + ghUser + '/' + ghRepo + (isPrivate ? ' --private' : ' --public') },
     { cls: 'primary', text: '  Authenticating with GitHub…' },
     { cls: 'success', text: '  ✓ Repository created: ' + repoURL },
-    { cls: 'info',    text: '$ git init && git add . && git commit -m "Initial commit from Copilot GPT 5.4"' },
+    { cls: 'info',    text: '$ git init && git add . && git commit -m "Initial commit from ' + copilotModel + '"' },
     { cls: 'success', text: '  ✓ Initial commit created' },
     { cls: 'info',    text: '$ git push origin ' + branch },
     { cls: 'success', text: '  ✓ Code pushed to ' + repoURL },
@@ -1160,7 +1163,7 @@ function startBuild(ghUser, ghRepo) {
           document.getElementById('liveLink').style.display = 'none';
         }
         document.getElementById('successDesc').textContent =
-          'Copilot GPT 5.4 generated your ' + appType + ' app "' + appName +
+          copilotModel + ' generated your ' + appType + ' app "' + appName +
           '", pushed all code to GitHub, and ' +
           (deployTarget !== 'none' ? 'deployed it to ' + deployTarget + '.' : 'committed the code to your repository.');
 
