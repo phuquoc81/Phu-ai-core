@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Contact SuperI.TBoyz for app ideas, games, support, and platform questions." />
+  <title>Contact — SuperI.TBoyz</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%236c63ff'/><text y='.9em' font-size='70' x='15'>📬</text></svg>" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" />
+  <link rel="stylesheet" href="../css/styles.css" />
+  <style>
+    .page-hero {
+      padding: 8rem 1.5rem 4rem;
+      text-align: center;
+      background: radial-gradient(ellipse 80% 50% at 50% -10%, rgba(255,101,132,0.16) 0%, transparent 60%);
+    }
+    .page-hero h1 { font-size: clamp(2rem, 5vw, 3.5rem); font-weight: 900; margin-bottom: 1rem; }
+    .page-hero p { color: var(--color-muted); max-width: 720px; margin: 0 auto 2rem; line-height: 1.7; }
+    .contact-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 3rem;
+    }
+    .contact-card {
+      background: var(--color-card);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      padding: 1.5rem;
+      box-shadow: var(--shadow);
+    }
+    .contact-card h2 { font-size: 1.1rem; margin-bottom: 0.75rem; }
+    .contact-card p, .contact-card li { color: var(--color-muted); }
+    .contact-card ul {
+      list-style: none;
+      padding: 0;
+      display: grid;
+      gap: 0.75rem;
+    }
+  </style>
+</head>
+<body>
+
+<nav class="nav" role="navigation" aria-label="Main navigation">
+  <a href="../index.html" class="nav-brand" aria-label="SuperI.TBoyz Home">
+    <span class="logo-icon" aria-hidden="true">📬</span>
+    SuperI.TBoyz
+  </a>
+
+  <button class="hamburger" id="hamburger" aria-label="Toggle navigation" aria-expanded="false" aria-controls="navLinks">
+    <span></span><span></span><span></span>
+  </button>
+
+  <ul class="nav-links" id="navLinks" role="list">
+    <li><a href="../index.html">Home</a></li>
+    <li><a href="apps.html">Apps</a></li>
+    <li><a href="games.html">Games</a></li>
+    <li><a href="contact.html">Contact</a></li>
+    <li><a href="https://phubers.blog" target="_blank" rel="noopener noreferrer">Blog</a></li>
+    <li><a href="terms.html">Terms</a></li>
+    <li><a href="privacy.html">Privacy</a></li>
+  </ul>
+</nav>
+
+<div class="page-hero">
+  <span class="hero-badge"><span aria-hidden="true">📞</span> Reach SuperI.TBoyz</span>
+  <h1 class="gradient-text">Contact &amp; Support</h1>
+  <p>
+    Use the details below to ask about apps, games, platform ideas, or partnership opportunities.
+    This page reflects the direct contact information provided in the issue requirements.
+  </p>
+  <div class="hero-actions">
+    <a href="mailto:anhvankiet81@gmail.com" class="btn btn-primary">Email Us</a>
+    <a href="https://phubers.blog" class="btn btn-outline" target="_blank" rel="noopener noreferrer">Visit Blog</a>
+  </div>
+</div>
+
+<main>
+  <div class="container">
+    <div class="contact-grid">
+      <section class="contact-card fade-in" aria-labelledby="officeTitle">
+        <h2 id="officeTitle">Mailing Address</h2>
+        <p>
+          SuperI.TBoyz<br />
+          65 Bensley Lane<br />
+          Hamilton, Ontario, Canada
+        </p>
+      </section>
+
+      <section class="contact-card fade-in" aria-labelledby="directTitle">
+        <h2 id="directTitle">Direct Contact</h2>
+        <ul>
+          <li><strong>Phone:</strong> <a href="tel:+13653662208">1-365-366-2208</a></li>
+          <li><strong>Email:</strong> <a href="mailto:anhvankiet81@gmail.com">anhvankiet81@gmail.com</a></li>
+          <li><strong>Blog:</strong> <a href="https://phubers.blog" target="_blank" rel="noopener noreferrer">phubers.blog</a></li>
+        </ul>
+      </section>
+
+      <section class="contact-card fade-in" aria-labelledby="supportTitle">
+        <h2 id="supportTitle">What to Contact Us About</h2>
+        <ul>
+          <li>SuperI.TBoyz apps and AI tool ideas</li>
+          <li>Game demos and launch updates</li>
+          <li>Website builder and SuperIT-OS concepts</li>
+          <li>General questions about the Phu AI Core platform</li>
+        </ul>
+      </section>
+    </div>
+  </div>
+</main>
+
+<footer class="footer" role="contentinfo">
+  <div class="container">
+    <div class="footer-bottom">
+      <span>© <span id="footerYear">2025</span> SuperI.TBoyz. All rights reserved.</span>
+      <div class="footer-bottom-links">
+        <a href="../index.html">Home</a>
+        <a href="apps.html">Apps</a>
+        <a href="games.html">Games</a>
+        <a href="https://phubers.blog" target="_blank" rel="noopener noreferrer">Blog</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="../js/app.js"></script>
+<script>document.getElementById('footerYear').textContent = new Date().getFullYear();</script>
+</body>
+</html>
