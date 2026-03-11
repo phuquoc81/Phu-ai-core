@@ -2,61 +2,87 @@
 
 ## Project Overview
 
-Phu AI is a static web application built with vanilla HTML, CSS, and JavaScript, deployed to Azure App Service via GitHub Actions.
+Phu AI Core is a mixed repository containing:
+
+- a public marketing site built with static HTML, CSS, and vanilla JavaScript at the repository root,
+- a React frontend application in `/frontend`,
+- an Express/MongoDB backend API in `/backend`,
+- and a Solidity smart contract in `/smart-contract`.
+
+Keep changes scoped to the part of the product you are working on.
 
 ## Repository Structure
 
-```
+```text
 /
-├── index.html          # Main landing page
-├── css/
-│   └── styles.css      # Global stylesheet
-├── js/
-│   └── app.js          # Main JavaScript (navigation, modals, pricing, animations)
-├── pages/
-│   ├── apps.html       # Apps/features page
-│   ├── privacy.html    # Privacy policy
-│   └── terms.html      # Terms of service
-└── .github/
-    └── workflows/
-        └── azure-webapps-node.yml  # CI/CD pipeline to Azure
+├── index.html                # Marketing landing page
+├── css/                      # Shared marketing-site styles
+├── js/                       # Shared marketing-site JavaScript
+├── pages/                    # Additional static marketing pages
+├── frontend/                 # React application (react-scripts)
+│   ├── package.json
+│   └── src/
+├── backend/                  # Express API
+│   ├── package.json
+│   └── src/
+├── smart-contract/           # Solidity contract(s)
+├── docker-compose.yml
+└── .github/workflows/        # CI/CD workflows
 ```
 
 ## Tech Stack
 
-- **Frontend**: Vanilla HTML5, CSS3, JavaScript (ES6+, strict mode)
-- **Hosting**: Azure App Service (deployed via GitHub Actions)
-- **No build step**: Files are served as-is (no bundler or transpiler)
-- **No frameworks**: Pure DOM APIs only — do not introduce React, Vue, jQuery, etc.
+- **Marketing site**: Vanilla HTML5, CSS3, and JavaScript
+- **Frontend app**: React with `react-scripts`
+- **Backend API**: Node.js, Express, Mongoose, Stripe
+- **Smart contract**: Solidity
 
 ## Coding Conventions
 
-- JavaScript uses `'use strict'` and is organized into IIFEs per feature section.
-- All JS is in `/js/app.js`; add new features as clearly labelled IIFE blocks.
-- CSS variables and utility classes are defined in `/css/styles.css`.
-- Use `const`/`let`, arrow functions, template literals, and modern DOM APIs.
-- Accessibility: always set `aria-*` attributes on interactive elements.
-- Animations use the `IntersectionObserver` API and CSS transitions — avoid JS-based animation libraries.
+### Root marketing site
 
-## Key UI Patterns
+- Keep marketing-site JavaScript in `/js/app.js`.
+- Use the existing IIFE-based structure for new vanilla JavaScript behaviors.
+- Reuse existing CSS variables and utility classes from `/css/styles.css`.
+- Prefer modern DOM APIs and accessible markup.
 
-- **Modals**: Use the `Modal.open(id)` / `Modal.close(id)` / `Modal.closeAll()` API defined in `app.js`.
-- **Toast notifications**: Use `Toast.show(message, type, duration)` — types: `'success'`, `'error'`, `'info'`, `'warning'`.
-- **Smooth scroll**: All `href="#anchor"` links use the built-in smooth scroll handler.
-- **Counters**: Add `data-counter`, `data-target`, `data-suffix`, `data-prefix`, and `data-decimals` attributes to trigger animated counters.
-- **Fade-in animations**: Add class `fade-in` to elements to trigger scroll-based entrance animations.
+### Frontend (`/frontend`)
+
+- Follow the existing React structure in `frontend/src`.
+- Use the existing service/context patterns before introducing new abstractions.
+- Do not add new frontend frameworks or replace `react-scripts` tooling without a strong reason.
+
+### Backend (`/backend`)
+
+- Keep API logic in the existing controller/route/middleware structure.
+- Reuse the current security middleware patterns (`helmet`, CORS, rate limiting, JWT auth).
+- Do not hardcode secrets or fallback production credentials.
+
+## Build and Test Commands
+
+Run commands from the repository root unless the task is isolated to a subproject:
+
+- `npm run build` — installs frontend dependencies and builds the React app
+- `npm test` — installs frontend dependencies and runs the React test runner with `--passWithNoTests`
+- `npm run start:frontend`
+- `npm run start:backend`
+
+Subproject commands:
+
+- `cd frontend && npm start|build|test`
+- `cd backend && npm start`
 
 ## CI/CD
 
-- Pushes to `main` trigger the Azure Web Apps deployment workflow.
-- The workflow runs `npm install`, `npm run build --if-present`, and `npm run test --if-present`.
-- There is currently no `package.json`, so the build and test steps have no effect; add one if introducing npm-based tooling.
+- `.github/workflows/azure-webapps-node.yml` uses the root `npm install`, `npm run build --if-present`, and `npm run test --if-present` flow.
+- `.github/workflows/deploy.yml` installs dependencies separately in `/frontend` and `/backend`, then builds the frontend artifact.
+- This repository does **not** currently keep lockfiles in `frontend/` or `backend/`, so workflows that install subproject dependencies should use `npm install` rather than `npm ci` unless lockfiles are added.
 
 ## Dos and Don'ts
 
-- ✅ Keep all logic in the existing files unless a new page is genuinely needed.
-- ✅ Follow existing IIFE patterns when adding JavaScript features.
-- ✅ Test changes in a modern browser (Chrome/Edge) before committing.
-- ❌ Do not introduce third-party JS/CSS frameworks or CDN dependencies without discussion.
-- ❌ Do not add `console.log` statements in production code.
-- ❌ Do not hardcode secrets or API keys in any file.
+- ✅ Make the smallest possible change that fixes the issue.
+- ✅ Update directly related docs or workflow config when the repo structure changes.
+- ✅ Validate the specific subproject you changed.
+- ❌ Do not introduce secrets, API keys, or committed `.env` files.
+- ❌ Do not replace the root static site with a framework app.
+- ❌ Do not make unrelated stylistic refactors.
