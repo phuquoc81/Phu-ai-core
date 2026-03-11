@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Browse SuperI.TBoyz games including UFO Card Game, Galaxy Miner, Alien Strategy, and other browser-based releases." />
+  <title>Games — SuperI.TBoyz</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%236c63ff'/><text y='.9em' font-size='70' x='15'>🎮</text></svg>" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" />
+  <link rel="stylesheet" href="../css/styles.css" />
+  <style>
+    .page-hero {
+      padding: 8rem 1.5rem 4rem;
+      text-align: center;
+      background: radial-gradient(ellipse 80% 50% at 50% -10%, rgba(0,212,255,0.2) 0%, transparent 60%);
+    }
+    .page-hero h1 { font-size: clamp(2rem, 5vw, 3.5rem); font-weight: 900; margin-bottom: 1rem; }
+    .page-hero p { color: var(--color-muted); max-width: 720px; margin: 0 auto 2rem; line-height: 1.7; }
+    .games-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1.25rem;
+      margin-bottom: 3rem;
+    }
+    .game-card {
+      background: var(--color-card);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      padding: 1.5rem;
+      box-shadow: var(--shadow);
+    }
+    .game-icon { font-size: 2.5rem; display: block; margin-bottom: 1rem; }
+    .game-card h2 { font-size: 1.15rem; margin-bottom: 0.5rem; }
+    .game-card p { color: var(--color-muted); font-size: 0.92rem; margin-bottom: 1rem; }
+    .info-panel {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      padding: 1.5rem;
+      margin-bottom: 3rem;
+    }
+    .info-panel ul {
+      list-style: disc;
+      color: var(--color-muted);
+      padding-left: 1.25rem;
+      display: grid;
+      gap: 0.6rem;
+    }
+  </style>
+</head>
+<body>
+
+<nav class="nav" role="navigation" aria-label="Main navigation">
+  <a href="../index.html" class="nav-brand" aria-label="Phu AI Core Home">
+    <span class="logo-icon" aria-hidden="true">🎮</span>
+    SuperI.TBoyz
+  </a>
+
+  <button class="hamburger" id="hamburger" aria-label="Toggle navigation" aria-expanded="false" aria-controls="navLinks">
+    <span></span><span></span><span></span>
+  </button>
+
+  <ul class="nav-links" id="navLinks" role="list">
+    <li><a href="../index.html">Home</a></li>
+    <li><a href="apps.html">Apps</a></li>
+    <li><a href="games.html">Games</a></li>
+    <li><a href="contact.html">Contact</a></li>
+    <li><a href="https://phubers.blog" target="_blank" rel="noopener noreferrer">Blog</a></li>
+    <li><a href="terms.html">Terms</a></li>
+    <li><a href="privacy.html">Privacy</a></li>
+  </ul>
+</nav>
+
+<div class="page-hero">
+  <span class="hero-badge"><span aria-hidden="true">🕹️</span> SuperI.TBoyz Game Hub</span>
+  <h1 class="gradient-text">Play SuperI.TBoyz Games</h1>
+  <p>
+    Explore the current browser-game lineup for SuperI.TBoyz, from card battles and strategy experiments
+    to arcade concepts connected to the wider SuperIT-OS and Phu AI ecosystem.
+  </p>
+  <div class="hero-actions">
+    <a href="apps.html" class="btn btn-primary">Explore Apps</a>
+    <a href="contact.html" class="btn btn-outline">Request a Game Demo</a>
+  </div>
+</div>
+
+<main>
+  <div class="container">
+    <section class="info-panel fade-in" aria-labelledby="gamesOverviewTitle">
+      <span class="section-tag">🚀 Featured Releases</span>
+      <h2 class="section-title" id="gamesOverviewTitle" style="text-align:left; margin-top:0.5rem;">Current SuperI.TBoyz Titles</h2>
+      <p class="section-desc" style="text-align:left; margin:0 0 1rem;">
+        These game concepts are the clearest matches to the requested SuperI.TBoyz website requirements.
+      </p>
+      <ul>
+        <li>UFO Card Game — a fast strategy card battler built around alien fleets and upgrades.</li>
+        <li>Galaxy Miner — a resource-mining adventure with automation and progression loops.</li>
+        <li>Alien Strategy — a tactical command game focused on planning, expansion, and defense.</li>
+      </ul>
+    </section>
+
+    <section class="games-grid" aria-label="SuperI.TBoyz game list">
+      <article class="game-card fade-in">
+        <span class="game-icon" aria-hidden="true">🛸</span>
+        <h2>UFO Card Game</h2>
+        <p>Build your deck, deploy alien tech, and outplay opponents in quick tactical rounds.</p>
+        <div class="app-card-tags">
+          <span class="tag">Cards</span>
+          <span class="tag tag-cyan">Strategy</span>
+        </div>
+      </article>
+
+      <article class="game-card fade-in">
+        <span class="game-icon" aria-hidden="true">⛏️</span>
+        <h2>Galaxy Miner</h2>
+        <p>Mine rare resources across distant systems and optimise your route for maximum rewards.</p>
+        <div class="app-card-tags">
+          <span class="tag tag-gold">Mining</span>
+          <span class="tag tag-green">Simulation</span>
+        </div>
+      </article>
+
+      <article class="game-card fade-in">
+        <span class="game-icon" aria-hidden="true">👽</span>
+        <h2>Alien Strategy</h2>
+        <p>Command alien factions, expand territory, and balance offense, defense, and research.</p>
+        <div class="app-card-tags">
+          <span class="tag">Tactics</span>
+          <span class="tag tag-red">Competitive</span>
+        </div>
+      </article>
+
+      <article class="game-card fade-in">
+        <span class="game-icon" aria-hidden="true">🏎️</span>
+        <h2>Galaxy Race</h2>
+        <p>A high-speed sci-fi racer inspired by the evolving SuperIT-OS game roadmap.</p>
+        <div class="app-card-tags">
+          <span class="tag">Arcade</span>
+          <span class="tag tag-cyan">Racing</span>
+        </div>
+      </article>
+
+      <article class="game-card fade-in">
+        <span class="game-icon" aria-hidden="true">🌌</span>
+        <h2>Alien Miner</h2>
+        <p>Expand your mining network, unlock upgrades, and automate production across hostile worlds.</p>
+        <div class="app-card-tags">
+          <span class="tag tag-green">Automation</span>
+          <span class="tag">Builder</span>
+        </div>
+      </article>
+
+      <article class="game-card fade-in">
+        <span class="game-icon" aria-hidden="true">✨</span>
+        <h2>More Launching Soon</h2>
+        <p>SuperI.TBoyz continues to expand with HTML5 game ideas and AI-assisted prototypes.</p>
+        <div class="app-card-tags">
+          <span class="tag tag-gold">Upcoming</span>
+          <span class="tag">Browser Games</span>
+        </div>
+      </article>
+    </section>
+  </div>
+</main>
+
+<footer class="footer" role="contentinfo">
+  <div class="container">
+    <div class="footer-bottom">
+      <span>© <span id="footerYear">2025</span> SuperI.TBoyz. All rights reserved.</span>
+      <div class="footer-bottom-links">
+        <a href="../index.html">Home</a>
+        <a href="apps.html">Apps</a>
+        <a href="contact.html">Contact</a>
+        <a href="https://phubers.blog" target="_blank" rel="noopener noreferrer">Blog</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="../js/app.js"></script>
+<script>document.getElementById('footerYear').textContent = new Date().getFullYear();</script>
+</body>
+</html>
