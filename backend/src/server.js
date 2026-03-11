@@ -31,6 +31,13 @@ const webhookLimiter = rateLimit({
   legacyHeaders: false
 })
 
+const authLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 20,
+  standardHeaders: true,
+  legacyHeaders: false
+})
+
 // Stripe webhook MUST be registered before express.json()
 app.post('/api/stripe/webhook',
   webhookLimiter,
@@ -89,7 +96,7 @@ connectDB().catch(err => {
 })
 
 // Routes
-app.use('/api/auth', authRoutes)
+app.use('/api/auth', authLimiter, authRoutes)
 app.use('/api/stripe', stripeRoutes)
 app.use('/api/ai', aiRoutes)
 app.use('/api/usage', usageRoutes)
@@ -99,4 +106,19 @@ app.use('/api/admin', adminRoutes)
 app.get('/api/health', (req, res) => res.json({ status: 'ok' }))
 
 const PORT = process.env.PORT || 5000
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`))
+const server = app.listen(PORT, () => console.log(`Server running on port ${PORT}`))
+
+function gracefulShutdown(signal) {
+  console.log(`${signal} received, shutting down gracefully…`)
+  server.close(() => {
+    console.log('HTTP server closed')
+    process.exit(0)
+  })
+  setTimeout(() => {
+    console.error('Forced shutdown after timeout')
+    process.exit(1)
+  }, 10000)
+}
+
+process.on('SIGTERM', () => gracefulShutdown('SIGTERM'))
+process.on('SIGINT',  () => gracefulShutdown('SIGINT'))

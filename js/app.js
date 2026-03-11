@@ -390,3 +390,30 @@ document.querySelectorAll('a[href^="#"]').forEach(link => {
 
   btn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
 })();
+
+/* ============================================================
+   FAQ ACCORDION
+   ============================================================ */
+(function () {
+  document.querySelectorAll('.faq-question').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const expanded = btn.getAttribute('aria-expanded') === 'true';
+      const answerId = btn.getAttribute('aria-controls');
+      const answer   = answerId ? document.getElementById(answerId) : null;
+
+      // Close all other items
+      document.querySelectorAll('.faq-question').forEach(other => {
+        if (other !== btn) {
+          other.setAttribute('aria-expanded', 'false');
+          const otherId = other.getAttribute('aria-controls');
+          const otherAnswer = otherId ? document.getElementById(otherId) : null;
+          if (otherAnswer) otherAnswer.hidden = true;
+        }
+      });
+
+      // Toggle current
+      btn.setAttribute('aria-expanded', String(!expanded));
+      if (answer) answer.hidden = expanded;
+    });
+  });
+})();
