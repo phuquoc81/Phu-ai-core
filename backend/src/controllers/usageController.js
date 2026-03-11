@@ -9,16 +9,15 @@ exports.trackUsage = async (req, res, next) => {
     const { endpoint, model, tokens, metadata } = req.body;
     const credits = Math.max(1, Math.ceil((tokens || 0) / 1000));
 
-    const user = await User.findById(req.user.id);
-    if (!user) return res.status(404).json({ error: 'User not found' });
+    const user = await User.findOneAndUpdate(
+      { _id: req.user.id, credits: { $gte: credits } },
+      { $inc: { credits: -credits } },
+      { new: true }
+    );
 
-    if (user.credits < credits) {
+    if (!user) {
       return res.status(402).json({ error: 'Insufficient credits' });
     }
-
-    user.credits -= credits;
-    await user.save();
-
     const record = await Usage.create({
       userId:   user._id,
       teamId:   user.teamId || null,
