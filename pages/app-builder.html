@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Phu AI App Builder — describe your app idea, and Copilot GPT 5.3 automatically builds and deploys it to GitHub. No coding required." />
+  <meta name="description" content="Phu AI App Builder — describe your app idea, and Copilot GPT 5.4 automatically builds and deploys it to GitHub. No coding required." />
   <title>App Builder — Phu AI Core</title>
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%236c63ff'/><text y='.9em' font-size='70' x='15'>🧠</text></svg>" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -405,13 +405,13 @@
       <span class="hero-badge"><span aria-hidden="true">🔨</span> No-Code App Builder</span>
       <h1 class="gradient-text" id="heroHeading">Phu AI App Builder</h1>
       <p>
-        Describe your app idea in plain language. Copilot GPT 5.3 writes every line of code,
+        Describe your app idea in plain language. Copilot GPT 5.4 writes every line of code,
         creates your GitHub repository, and deploys your app — automatically.
         No coding required.
       </p>
-      <div class="copilot-badge" aria-label="Powered by Copilot GPT 5.3">
+      <div class="copilot-badge" aria-label="Powered by Copilot GPT 5.4">
         <span class="dot" aria-hidden="true"></span>
-        Powered by Copilot GPT 5.3 &amp; GitHub
+        Powered by Copilot GPT 5.4 &amp; GitHub
       </div>
       <div style="margin-top:1.75rem; display:flex; gap:0.75rem; flex-wrap:wrap;">
         <a href="#main" class="btn btn-primary" style="display:inline-flex; align-items:center; gap:0.5rem;">
@@ -430,7 +430,7 @@
         <div class="hero-image-ring" aria-hidden="true"></div>
         <img
           src="https://github.com/user-attachments/assets/fbb160f0-7d86-42f8-9c56-e75974c73d40"
-          alt="A human communicating with an advanced AI spacecraft — representing Copilot GPT 5.3 building your app automatically"
+          alt="A human communicating with an advanced AI spacecraft — representing Copilot GPT 5.4 building your app automatically"
           class="hero-image"
           loading="eager"
           width="420"
@@ -476,7 +476,7 @@
     <div class="builder-step active" id="step1" role="region" aria-labelledby="step1Title">
       <h2 class="step-title" id="step1Title">✏️ Describe Your App</h2>
       <p class="step-subtitle">
-        Tell Copilot GPT 5.3 what you want to build. The more detail you provide,
+        Tell Copilot GPT 5.4 what you want to build. The more detail you provide,
         the better the generated app. No coding knowledge required.
       </p>
 
@@ -547,6 +547,11 @@
           <span class="type-icon" aria-hidden="true">🤖</span>
           <span class="type-label">AI Tool</span>
         </label>
+        <label class="type-card" for="typeExtension">
+          <input type="radio" name="appType" id="typeExtension" value="Browser Extension" />
+          <span class="type-icon" aria-hidden="true">🧩</span>
+          <span class="type-label">Browser Extension</span>
+        </label>
       </div>
 
       <div class="step-nav">
@@ -561,7 +566,7 @@
     <div class="builder-step" id="step2" role="region" aria-labelledby="step2Title">
       <h2 class="step-title" id="step2Title">⚡ Choose Features</h2>
       <p class="step-subtitle">
-        Select the features you want Copilot GPT 5.3 to include in your app.
+        Select the features you want Copilot GPT 5.4 to include in your app.
         You can add or remove these after building.
       </p>
 
@@ -575,8 +580,8 @@
           <span class="feature-check-icon" aria-hidden="true">🗄️</span> Database / Storage
         </label>
         <label class="feature-check" for="featAI">
-          <input type="checkbox" id="featAI" value="AI / Copilot GPT 5.3" checked />
-          <span class="feature-check-icon" aria-hidden="true">🤖</span> AI / Copilot GPT 5.3
+          <input type="checkbox" id="featAI" value="AI / Copilot GPT 5.4" checked />
+          <span class="feature-check-icon" aria-hidden="true">🤖</span> AI / Copilot GPT 5.4
         </label>
         <label class="feature-check" for="featPayments">
           <input type="checkbox" id="featPayments" value="Payments (Stripe)" />
@@ -630,7 +635,7 @@
     <div class="builder-step" id="step3" role="region" aria-labelledby="step3Title">
       <h2 class="step-title" id="step3Title">🐙 GitHub Settings</h2>
       <p class="step-subtitle">
-        Copilot GPT 5.3 will create a new GitHub repository, commit all generated code,
+        Copilot GPT 5.4 will create a new GitHub repository, commit all generated code,
         and set up GitHub Actions for automatic deployment.
       </p>
 
@@ -711,12 +716,12 @@
     <div class="builder-step" id="step4" role="region" aria-labelledby="step4Title">
       <h2 class="step-title" id="step4Title">🔨 Building Your App</h2>
       <p class="step-subtitle" id="step4Subtitle">
-        Copilot GPT 5.3 is generating your code and setting up GitHub. This takes about 30 seconds.
+        Copilot GPT 5.4 is generating your code and setting up GitHub. This takes about 30 seconds.
       </p>
 
       <div class="build-status" id="buildStatus" aria-live="polite" aria-atomic="true">
         <span class="status-dot running" id="statusDot" aria-hidden="true"></span>
-        <span id="statusText">Initialising Copilot GPT 5.3…</span>
+        <span id="statusText">Initialising Copilot GPT 5.4…</span>
       </div>
 
       <div class="build-progress" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" id="buildProgressBar" aria-label="Build progress">
@@ -730,7 +735,7 @@
         <span class="success-icon" aria-hidden="true">🎉</span>
         <h3 class="success-title gradient-text">Your App is Ready!</h3>
         <p class="success-desc" id="successDesc">
-          Copilot GPT 5.3 has generated your app, pushed all code to GitHub,
+          Copilot GPT 5.4 has generated your app, pushed all code to GitHub,
           and deployed it successfully.
         </p>
         <div class="result-links" id="resultLinks">
@@ -766,14 +771,14 @@
         <div style="font-size:2.5rem; margin-bottom:0.75rem;">💬</div>
         <h3 style="font-size:1rem; font-weight:800; margin-bottom:0.5rem;">1. Describe</h3>
         <p style="font-size:0.85rem; color:var(--color-muted); line-height:1.6;">
-          Tell Copilot GPT 5.3 what you want to build in plain English — no tech knowledge needed.
+          Tell Copilot GPT 5.4 what you want to build in plain English — no tech knowledge needed.
         </p>
       </div>
       <div class="app-card fade-in" style="text-align:center;">
         <div style="font-size:2.5rem; margin-bottom:0.75rem;">🤖</div>
         <h3 style="font-size:1rem; font-weight:800; margin-bottom:0.5rem;">2. AI Generates</h3>
         <p style="font-size:0.85rem; color:var(--color-muted); line-height:1.6;">
-          Copilot GPT 5.3 writes every file — HTML, CSS, JavaScript, backend logic, and tests.
+          Copilot GPT 5.4 writes every file — HTML, CSS, JavaScript, backend logic, and tests.
         </p>
       </div>
       <div class="app-card fade-in" style="text-align:center;">
@@ -1066,13 +1071,13 @@ function startBuild(ghUser, ghRepo) {
   let lineIdx = 0;
 
   const buildLines = [
-    { cls: 'info',    text: '$ copilot-gpt5.3 init --app "' + appName + '" --type ' + appType },
-    { cls: 'primary', text: '  [Copilot GPT 5.3] Analyzing requirements…' },
-    { cls: 'info',    text: '  [Copilot GPT 5.3] Planning architecture for ' + appType + '…' },
-    { cls: 'primary', text: '  [Copilot GPT 5.3] Generating project scaffold…' },
+    { cls: 'info',    text: '$ copilot-gpt5.4 init --app "' + appName + '" --type ' + appType },
+    { cls: 'primary', text: '  [Copilot GPT 5.4] Analyzing requirements…' },
+    { cls: 'info',    text: '  [Copilot GPT 5.4] Planning architecture for ' + appType + '…' },
+    { cls: 'primary', text: '  [Copilot GPT 5.4] Generating project scaffold…' },
     { cls: 'success', text: '  ✓ Project scaffold created' },
-    { cls: 'info',    text: '$ copilot-gpt5.3 generate --features ' + features.slice(0, 3).join(',') },
-    { cls: 'primary', text: '  [Copilot GPT 5.3] Writing source files…' },
+    { cls: 'info',    text: '$ copilot-gpt5.4 generate --features ' + features.slice(0, 3).join(',') },
+    { cls: 'primary', text: '  [Copilot GPT 5.4] Writing source files…' },
     { cls: 'info',    text: '  Generating index.html…' },
     { cls: 'info',    text: '  Generating styles.css…' },
     { cls: 'info',    text: '  Generating app.js…' },
@@ -1086,7 +1091,7 @@ function startBuild(ghUser, ghRepo) {
     { cls: 'info',    text: '$ gh repo create ' + ghUser + '/' + ghRepo + (isPrivate ? ' --private' : ' --public') },
     { cls: 'primary', text: '  Authenticating with GitHub…' },
     { cls: 'success', text: '  ✓ Repository created: ' + repoURL },
-    { cls: 'info',    text: '$ git init && git add . && git commit -m "Initial commit from Copilot GPT 5.3"' },
+    { cls: 'info',    text: '$ git init && git add . && git commit -m "Initial commit from Copilot GPT 5.4"' },
     { cls: 'success', text: '  ✓ Initial commit created' },
     { cls: 'info',    text: '$ git push origin ' + branch },
     { cls: 'success', text: '  ✓ Code pushed to ' + repoURL },
@@ -1155,7 +1160,7 @@ function startBuild(ghUser, ghRepo) {
           document.getElementById('liveLink').style.display = 'none';
         }
         document.getElementById('successDesc').textContent =
-          'Copilot GPT 5.3 generated your ' + appType + ' app "' + appName +
+          'Copilot GPT 5.4 generated your ' + appType + ' app "' + appName +
           '", pushed all code to GitHub, and ' +
           (deployTarget !== 'none' ? 'deployed it to ' + deployTarget + '.' : 'committed the code to your repository.');
 

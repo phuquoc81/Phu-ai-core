@@ -1,9 +1,27 @@
 import stripe from '../config/stripe.js'
 import User from '../models/User.js'
 
+// Allowlist of valid Stripe price IDs to prevent arbitrary price injection
+const ALLOWED_PRICE_IDS = (process.env.STRIPE_ALLOWED_PRICE_IDS || '')
+  .split(',')
+  .map(id => id.trim())
+  .filter(Boolean)
+
 export const createCheckoutSession = async (req, res) => {
   try {
     const { priceId, email } = req.body
+
+    if (!priceId || typeof priceId !== 'string') {
+      return res.status(400).json({ message: 'priceId is required' })
+    }
+
+    if (!email || typeof email !== 'string' || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      return res.status(400).json({ message: 'Valid email is required' })
+    }
+
+    if (ALLOWED_PRICE_IDS.length > 0 && !ALLOWED_PRICE_IDS.includes(priceId)) {
+      return res.status(400).json({ message: 'Invalid price selection' })
+    }
 
     let user = await User.findOne({ email })
     if (!user) user = await User.create({ email })
