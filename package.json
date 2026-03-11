@@ -8,7 +8,9 @@
     "install:frontend": "cd frontend && npm install",
     "start:backend": "cd backend && npm start",
     "start:frontend": "cd frontend && npm start",
-    "build:frontend": "cd frontend && npm run build"
+    "build": "npm --prefix frontend install && npm --prefix frontend run build",
+    "build:frontend": "cd frontend && npm run build",
+    "test": "npm --prefix frontend install && CI=true npm --prefix frontend test -- --watchAll=false --passWithNoTests"
   },
   "engines": {
     "node": ">=20.x"
