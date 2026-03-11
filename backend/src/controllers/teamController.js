@@ -87,10 +87,18 @@ exports.removeMember = async (req, res, next) => {
       return res.status(400).json({ error: 'Owner cannot remove themselves' });
     }
 
-    team.members = team.members.filter(m => String(m.userId) !== memberId);
+    const isMember = team.members.some(m => String(m.userId) === String(memberId));
+    if (!isMember) {
+      return res.status(404).json({ error: 'Member not found in this team' });
+    }
+
+    team.members = team.members.filter(m => String(m.userId) !== String(memberId));
     await team.save();
 
-    await User.findByIdAndUpdate(memberId, { teamId: null });
+    await User.findOneAndUpdate(
+      { _id: memberId, teamId: team._id },
+      { teamId: null }
+    );
 
     res.json({ team });
   } catch (err) {
