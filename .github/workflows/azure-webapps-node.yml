@@ -64,6 +64,7 @@ jobs:
       run: echo "AZURE_WEBAPP_PUBLISH_PROFILE is not configured; skipping Azure deployment."
 
     - name: Upload artifact for deployment job
+      if: steps.azure-publish-profile.outputs.configured == 'true'
       uses: actions/upload-artifact@v4
       with:
         name: node-app
