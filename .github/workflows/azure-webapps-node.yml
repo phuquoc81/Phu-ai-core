@@ -33,6 +33,8 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
+    outputs:
+      should_deploy: ${{ steps.azure-publish-profile.outputs.configured }}
     steps:
     - uses: actions/checkout@v4
 
@@ -48,6 +50,19 @@ jobs:
         npm run build --if-present
         npm run test --if-present
 
+    - name: Check Azure deployment credentials
+      id: azure-publish-profile
+      run: |
+        if [ -n "${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}" ]; then
+          echo "configured=true" >> "$GITHUB_OUTPUT"
+        else
+          echo "configured=false" >> "$GITHUB_OUTPUT"
+        fi
+
+    - name: Note skipped Azure deploy
+      if: steps.azure-publish-profile.outputs.configured != 'true'
+      run: echo "AZURE_WEBAPP_PUBLISH_PROFILE is not configured; skipping Azure deployment."
+
     - name: Upload artifact for deployment job
       uses: actions/upload-artifact@v4
       with:
@@ -59,6 +74,7 @@ jobs:
       contents: none
     runs-on: ubuntu-latest
     needs: build
+    if: needs.build.outputs.should_deploy == 'true'
     environment:
       name: 'Development'
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
