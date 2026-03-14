@@ -1,5 +1,7 @@
 # PhuAI Nexus Pro
 
+[![Azure Web Apps workflow status](https://github.com/phuquoc81/Phu-ai-core/actions/workflows/azure-webapps-node.yml/badge.svg)](https://github.com/phuquoc81/Phu-ai-core/actions/workflows/azure-webapps-node.yml)
+
 **AI Automation • Web3 Payments • Global Compliance**
 
 Enterprise AI SaaS Platform — fully monetized, subscription-controlled, and production-deployable.
