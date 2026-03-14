@@ -33,6 +33,8 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
+    outputs:
+      has_publish_profile: ${{ steps.deploy-config.outputs.has_publish_profile }}
     steps:
     - uses: actions/checkout@v4
 
@@ -48,6 +50,17 @@ jobs:
         npm run build --if-present
         npm run test --if-present
 
+    - name: Detect Azure publish profile
+      id: deploy-config
+      env:
+        AZURE_WEBAPP_PUBLISH_PROFILE: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
+      run: |
+        if [ -n "$AZURE_WEBAPP_PUBLISH_PROFILE" ]; then
+          echo "has_publish_profile=true" >> "$GITHUB_OUTPUT"
+        else
+          echo "has_publish_profile=false" >> "$GITHUB_OUTPUT"
+        fi
+
     - name: Upload artifact for deployment job
       uses: actions/upload-artifact@v4
       with:
@@ -55,7 +68,7 @@ jobs:
         path: .
 
   deploy:
-    if: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE != '' }}
+    if: ${{ needs.build.outputs.has_publish_profile == 'true' }}
     permissions:
       contents: none
     runs-on: ubuntu-latest
