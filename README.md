@@ -1,6 +1,6 @@
 # PhuAI Nexus Pro
 
-<a href="https://github.com/phuquoc81/Phu-ai-core/actions/workflows/azure-webapps-node.yml"><img src="https://github.com/phuquoc81/Phu-ai-core/actions/workflows/azure-webapps-node.yml/badge.svg" alt="Azure Web Apps workflow status"></a>
+[![Azure Web Apps workflow status](https://github.com/phuquoc81/Phu-ai-core/actions/workflows/azure-webapps-node.yml/badge.svg)](https://github.com/phuquoc81/Phu-ai-core/actions/workflows/azure-webapps-node.yml)
 
 **AI Automation • Web3 Payments • Global Compliance**
 
