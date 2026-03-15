@@ -1,10 +1,12 @@
 # PhuAI Nexus Pro
 
-<a href="https://github.com/phuquoc81/Phu-ai-core/actions/workflows/azure-webapps-node.yml"><img src="https://github.com/phuquoc81/Phu-ai-core/actions/workflows/azure-webapps-node.yml/badge.svg"></a>
+<!-- markdownlint-disable-next-line MD013 -->
+<a href="https://github.com/phuquoc81/Phu-ai-core/actions/workflows/azure-webapps-node.yml"><img src="https://github.com/phuquoc81/Phu-ai-core/actions/workflows/azure-webapps-node.yml/badge.svg" alt="Azure Web Apps workflow status"></a>
 
 **AI Automation • Web3 Payments • Global Compliance**
 
-Enterprise AI SaaS Platform — fully monetized, subscription-controlled, and production-deployable.
+Enterprise AI SaaS Platform — fully monetized,
+subscription-controlled, and production-deployable.
 
 ## Features
 
@@ -88,4 +90,4 @@ docker-compose up --build
 - ✔ Webhook signature verification prevents spoofing
 - ✔ JWT expiry & bcrypt password hashing
 - ✔ Rate limiting on all API routes
-- ✔ CORS restricted to configured frontend URL 
+- ✔ CORS restricted to configured frontend URL
