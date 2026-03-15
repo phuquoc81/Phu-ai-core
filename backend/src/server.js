@@ -72,7 +72,30 @@ app.use(errorHandler);
 
 // ── Start ─────────────────────────────────────────────────────
 if (require.main === module) {
-  app.listen(PORT, () => logger.info(`PhuAI Nexus Pro backend running on port ${PORT}`));
+  const mongoose = require('mongoose');
+  const server = app.listen(PORT, () => logger.info(`PhuAI Nexus Pro backend running on port ${PORT}`));
+
+  const shutdown = (signal) => {
+    logger.info(`${signal} received — shutting down gracefully`);
+    server.close(async () => {
+      logger.info('HTTP server closed');
+      try {
+        await mongoose.connection.close();
+        logger.info('MongoDB connection closed');
+      } catch (err) {
+        logger.error(`Error closing MongoDB connection: ${err.message}`);
+      }
+      process.exit(0);
+    });
+    // Force exit if graceful shutdown takes too long
+    setTimeout(() => {
+      logger.warn('Graceful shutdown timed out — forcing exit');
+      process.exit(1);
+    }, 10000).unref();
+  };
+
+  process.on('SIGTERM', () => shutdown('SIGTERM'));
+  process.on('SIGINT',  () => shutdown('SIGINT'));
 }
 
 module.exports = app;
