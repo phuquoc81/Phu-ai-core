@@ -13,6 +13,7 @@ import aiRoutes from './routes/ai.js'
 import usageRoutes from './routes/usage.js'
 import teamRoutes from './routes/team.js'
 import adminRoutes from './routes/admin.js'
+import phutumRoutes from './routes/phutum.js'
 
 const app = express()
 
@@ -102,6 +103,7 @@ app.use('/api/ai', aiRoutes)
 app.use('/api/usage', usageRoutes)
 app.use('/api/team', teamRoutes)
 app.use('/api/admin', adminRoutes)
+app.use('/api/phutum', phutumRoutes)
 
 app.get('/api/health', (req, res) => res.json({ status: 'ok' }))
 

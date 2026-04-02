@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { AuthProvider } from './context/AuthContext'
 import Pricing from './pages/Pricing'
 import Dashboard from './pages/Dashboard'
+import Phutum from './pages/Phutum'
 import Success from './pages/Success'
 import Cancel from './pages/Cancel'
 import Login from './pages/Login'
@@ -17,6 +18,7 @@ export default function App() {
           <Route path="/register" element={<Register />} />
           <Route path="/pricing" element={<Pricing />} />
           <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/phutum" element={<Phutum />} />
           <Route path="/success" element={<Success />} />
           <Route path="/cancel" element={<Cancel />} />
           <Route path="*" element={<Pricing />} />

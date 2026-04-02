@@ -52,12 +52,18 @@ export default function Dashboard() {
       </div>
 
       <div style={{ display: 'flex', gap: '1rem' }}>
-        <button
-          onClick={openBillingPortal}
-          style={{ padding: '0.75rem 1.5rem', background: '#6c63ff', color: '#fff', border: 'none', borderRadius: '8px', cursor: 'pointer', fontWeight: 'bold' }}
-        >
-          Manage Billing
-        </button>
+<button
+	          onClick={openBillingPortal}
+	          style={{ padding: '0.75rem 1.5rem', background: '#6c63ff', color: '#fff', border: 'none', borderRadius: '8px', cursor: 'pointer', fontWeight: 'bold' }}
+	        >
+	          Manage Billing
+	        </button>
+	        <button
+	          onClick={() => window.location.href='/phutum'}
+	          style={{ padding: '0.75rem 1.5rem', background: '#28a745', color: '#fff', border: 'none', borderRadius: '8px', cursor: 'pointer', fontWeight: 'bold' }}
+	        >
+	          Open Phutum Core
+	        </button>
       </div>
     </div>
   )
